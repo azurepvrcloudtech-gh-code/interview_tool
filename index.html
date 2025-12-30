@@ -223,6 +223,8 @@ PYSPARK|How do you write data using Delta/Parquet with best practices?
   // ==============================
   // DOM
   // ==============================
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhuoLFzc1OdasCeMyPnCgUzWbXt-VsSe64PJnM5vyVyo26gvR3XirEf3fIkDnYBrow/exec";
+  const SECRET_KEY = "PVR_CLOUDTECH_2026"; // must match Apps Script
   const elName = document.getElementById('candidateName');
   const elCount = document.getElementById('questionCount');
   const elTopic = document.getElementById('topicSelect');
@@ -446,12 +448,56 @@ updateBankInfo();
     }
   });
 
-  btnComplete.addEventListener('click', () => {
-    saveCurrentAnswer();
-    downloadTextFile();
-    showToast('Downloaded answers file.');
-  });
+  btnComplete.addEventListener('click', async () => {
+  saveCurrentAnswer();
 
+  const candidate = (elName.value || '').trim();
+  if (!candidate) {
+    showToast("Please enter candidate name.");
+    return;
+  }
+
+  // Build payload: questions + answers in the same order shown
+  const questionsPayload = selected.map((q, i) => ({
+    order: i + 1,
+    question: q.text,
+    answer: (answers[q.id] || '').trim()
+  }));
+
+  const payload = {
+    secret: SECRET_KEY,
+    candidate,
+    topic: "ALL",                 // later we can replace with dropdown topic
+    totalQuestions: selected.length,
+    questions: questionsPayload
+  };
+
+  try {
+    showToast("Submitting...");
+
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
+      showToast("Submitted successfully ✅");
+      // Optional backup download:
+      // downloadTextFile();
+      console.log("Saved file:", data.fileUrl);
+    } else {
+      showToast("Submit failed: " + (data.error || "unknown"));
+    }
+
+  } catch (err) {
+    showToast("Network error: " + err.message);
+  }
+});
+
+  
   btnCopy.addEventListener('click', async () => {
     saveCurrentAnswer();
     const q = selected[idx];
@@ -490,3 +536,4 @@ updateBankInfo();
 </script>
 </body>
 </html>
+
