@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ADF MCQ Test</title>
   <style>
+    /* Watermark background */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  background: url("./assets/watermark.png") center/420px no-repeat;
+  opacity: 0.06;          /* adjust: 0.04 to 0.10 */
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Keep your actual content above watermark */
+.wrap { position: relative; z-index: 1; }
+
     :root { --bg:#0b1020; --card:#121a33; --text:#e8ecff; --muted:#aab3d6; --accent:#7aa2ff; --danger:#ff6b6b; }
     * { box-sizing:border-box; }
     body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -44,7 +58,20 @@
     }
     .opt input { width:auto; margin-top: 2px; }
     .opt:hover { background: rgba(255,255,255,.06); }
-
+    .brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo{
+  height:44px;           /* change to 50 or 60 if needed */
+  width:auto;
+  display:block;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,.35));
+}
+@media (max-width:520px){
+  .logo{ height:38px; }
+}
     .toolbar { display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center; margin-top: 12px; }
     .btn { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.07); color: var(--text);
       padding: 10px 12px; border-radius: 12px; cursor:pointer; font-weight:600; }
@@ -70,12 +97,15 @@
 <body>
   <div class="wrap">
     <div class="header">
-      <div>
-        <h1>ADF MCQ Test</h1>
-        <p class="sub">Select difficulty, answer MCQs, then submit. Results are saved automatically.</p>
-      </div>
-      <div class="pill" id="statusPill">Not started</div>
+  <div class="brand">
+    <img class="logo" src="./assets/logo.png" alt="PVR Cloud Tech logo" />
+    <div>
+      <h1>Interview Questions Practice Tool</h1>
+      <p class="sub">Shuffle questions, collect answers, and download a single text file per candidate.</p>
     </div>
+  </div>
+  <div class="pill" id="statusPill">Not started</div>
+</div>
 
     <div class="card">
       <div class="row">
