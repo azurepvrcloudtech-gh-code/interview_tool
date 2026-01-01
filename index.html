@@ -1,228 +1,207 @@
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ADF MCQ Test</title>
+  <title>PVRCloudTech - ADF MCQ Test</title>
   <style>
-    /* Watermark background */
-body::before{
-  content:"";
-  position: fixed;
-  inset: 0;
-  background: url("./assets/watermark.png") center/420px no-repeat;
-  opacity: 0.06;          /* adjust: 0.04 to 0.10 */
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Keep your actual content above watermark */
-.wrap { position: relative; z-index: 1; }
-
-    :root { --bg:#0b1020; --card:#121a33; --text:#e8ecff; --muted:#aab3d6; --accent:#7aa2ff; --danger:#ff6b6b; }
-    * { box-sizing:border-box; }
+    :root { --bg:#0b1020; --card:#121a33; --text:#e8ecff; --muted:#aab3d6; --accent:#7aa2ff; --danger:#ff6b6b; --ok:#4ade80; }
+    * { box-sizing: border-box; }
     body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, #18214a 0%, var(--bg) 55%), var(--bg); color: var(--text); }
-    .wrap {
-  max-width: 960px;
-  margin: 64px auto 80px auto;   /* more top margin */
-  padding: 0 20px;
-}
+      background: radial-gradient(1200px 600px at 20% 0%, #18214a 0%, var(--bg) 55%), var(--bg);
+      color: var(--text);
+    }
+    .wrap { max-width: 980px; margin: 28px auto; padding: 0 16px; position:relative; }
     .header { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom: 14px; }
-    h1 { margin:0; font-size: 22px; }
+    h1 { margin:0; font-size: 22px; letter-spacing: .2px; }
     .sub { margin:6px 0 0; color: var(--muted); font-size: 13px; }
-    .pill { font-size: 12px; color: var(--muted); border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18); padding: 6px 10px; border-radius: 999px; }
     .card { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.10); border-radius: 18px; padding: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.35); }
+      border: 1px solid rgba(255,255,255,.10); border-radius: 18px; padding: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    .row { display:grid; grid-template-columns: 1fr; gap:12px; }
+    @media (min-width: 860px){ .row { grid-template-columns: 1fr 1fr; } }
+
     label { display:block; font-size: 12px; color: var(--muted); margin: 0 0 6px; }
-    input, select {
+    input[type="text"], select {
       width:100%; border-radius: 12px; border: 1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.20); color: var(--text); padding: 10px 12px; outline:none;
     }
     input:focus, select:focus { border-color: rgba(122,162,255,.65); box-shadow: 0 0 0 3px rgba(122,162,255,.15); }
-    .row { display:grid; grid-template-columns: 1fr; gap:12px; }
-    @media (min-width: 860px){ .row { grid-template-columns: 1fr 1fr; } }
+
+    .pill { font-size: 12px; color: var(--muted); border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18); padding: 6px 10px; border-radius: 999px;
+      white-space:nowrap;
+    }
     .divider { height:1px; background: rgba(255,255,255,.10); margin: 14px 0; }
+
     .qbox { padding: 14px; border-radius: 16px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); }
-    .qtitle { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .qtitle { display:flex; gap:10px; align-items:center; justify-content:space-between; }
     .qtitle h2 { margin:0; font-size: 16px; }
-    .meta { color: var(--muted); font-size: 12px; }
-    .qtext { margin: 10px 0 0; font-size: 14px; line-height:1.45; white-space:pre-wrap; }
-    .options { margin-top: 10px; display:grid; gap:10px; }
+    .qtitle .meta { color: var(--muted); font-size: 12px; }
+    .qtext { margin: 10px 0 0; color: var(--text); font-size: 14px; line-height: 1.45; white-space: pre-wrap; }
+
+    .options { margin-top: 12px; display:grid; gap:10px; }
     .opt {
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
       padding: 10px 12px;
-      cursor: pointer;
+      border-radius: 12px;
+      cursor:pointer;
       display:flex;
       gap:10px;
       align-items:flex-start;
+      user-select:none;
     }
-    .opt input { width:auto; margin-top: 2px; }
-    .opt:hover { background: rgba(255,255,255,.06); }
-    .brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
+    .opt:hover { background: rgba(255,255,255,.10); }
+    .opt input { margin-top: 2px; }
+    .opt.selected { border-color: rgba(122,162,255,.60); background: rgba(122,162,255,.14); }
 
-.logo {
-  height: 46px;
-  width: auto;
-  padding: 6px;
-  border-radius: 10px;
-
-  /* contrast boost */
-  background: rgba(255,255,255,0.08);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.12),
-    0 8px 20px rgba(0,0,0,0.4);
-}
-
-.brandText h1 {
-  margin: 0;
-}
-
-.brandText .sub {
-  margin-top: 4px;
-}
-@media (max-width:520px){
-  .logo{ height:38px; }
-}
-    .toolbar { display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center; margin-top: 12px; }
+    .toolbar { display:flex; flex-wrap: wrap; gap:10px; align-items:center; justify-content:space-between; margin: 12px 0 0; }
+    .left, .right { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
     .btn { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.07); color: var(--text);
       padding: 10px 12px; border-radius: 12px; cursor:pointer; font-weight:600; }
     .btn:hover { background: rgba(255,255,255,.12); }
     .btn.primary { background: rgba(122,162,255,.22); border-color: rgba(122,162,255,.5); }
     .btn.primary:hover { background: rgba(122,162,255,.30); }
+    .btn.danger { background: rgba(255,107,107,.18); border-color: rgba(255,107,107,.45); }
 
-    .resultBox { margin-top:12px; padding:12px; border-radius: 14px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+    /* Toast */
     .toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
       background: rgba(18,26,51,.95); border: 1px solid rgba(255,255,255,.14);
       padding: 10px 12px; border-radius: 12px; box-shadow: 0 10px 22px rgba(0,0,0,.35);
-      font-size: 13px; opacity: 0; pointer-events:none; transition: opacity .18s ease; }
+      color: var(--text); font-size: 13px; opacity: 0; pointer-events:none; transition: opacity .18s ease; z-index: 50; }
     .toast.show { opacity: 1; }
 
-    /* Confirm modal */
-    .modalBackdrop { position: fixed; inset:0; background: rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:16px; }
-    .modal { width: min(520px, 100%); background: rgba(18,26,51,.98); border:1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.45); }
-    .modal h3 { margin:0 0 8px; font-size: 16px; }
-    .modal p { margin:0; color: var(--muted); line-height: 1.45; }
-    .modalBtns { display:flex; gap:10px; justify-content:flex-end; margin-top: 12px; flex-wrap: wrap; }
+    /* Result box */
+    .result { margin-top: 14px; padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); display:none; }
+    .result strong { font-size: 14px; }
+    .ok { color: var(--ok); }
+    .bad { color: var(--danger); }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="header">
-  <div class="brand">
-    <img src="./assets/logo.png" class="logo" alt="PVR Cloud Tech">
-    <div class="brandText">
-      <h1>Interview Questions Practice Tool</h1>
-      <p class="sub">Shuffle questions, collect answers, and download a single text file per candidate.</p>
+      <div>
+        <h1>ADF MCQ Practice Test</h1>
+        <p class="sub">Random 25 questions per attempt (questions + options shuffled).</p>
+      </div>
+      <div class="pill" id="statusPill">Not started</div>
     </div>
-  </div>
-  <div class="pill" id="statusPill">Not started</div>
-</div>
 
     <div class="card">
       <div class="row">
-  <div>
-    <label for="candidateName">Candidate name</label>
-    <input id="candidateName" type="text" placeholder="e.g., Srinivas" />
-  </div>
-
-  <div>
-    <label for="candidatePhone">Phone number</label>
-    <input id="candidatePhone" type="text" placeholder="e.g., 9876543210" />
-  </div>
-
-  <div>
-    <label for="candidateEmail">Email ID</label>
-    <input id="candidateEmail" type="text" placeholder="e.g., name@gmail.com" />
-  </div>
-
-  <div>
-    <label for="difficulty">Difficulty</label>
-    <select id="difficulty">
-      <option value="basic">Basic</option>
-      <option value="intermediate">Intermediate</option>
-      <option value="advanced">Advanced</option>
-    </select>
-  </div>
-</div>
-
+        <div>
+          <label for="candidateName">Candidate name</label>
+          <input id="candidateName" type="text" placeholder="e.g., Rahul Sharma" />
+          <div class="hint">Name is stored in Google Sheet/Drive (if submit is enabled).</div>
+        </div>
+        <div>
+          <label for="difficulty">Difficulty</label>
+          <select id="difficulty">
+            <option value="basic" selected>Basic</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+          <div class="hint">Picks 25 random questions from the selected JSON bank.</div>
+        </div>
+      </div>
 
       <div class="divider"></div>
 
       <div class="qbox">
         <div class="qtitle">
           <h2>Question</h2>
-          <div class="meta" id="qMeta">0 / 0</div>
+          <div class="meta" id="qMeta">0 / 25</div>
         </div>
         <div class="qtext" id="qText">Click <b>Start</b> to begin.</div>
+
         <div class="options" id="options"></div>
 
         <div class="toolbar">
-          <button class="btn" id="btnStart">Start</button>
-          <button class="btn" id="btnPrev" disabled>Previous</button>
-          <button class="btn primary" id="btnNext" disabled>Save & Next</button>
-          <button class="btn primary" id="btnComplete" disabled>Complete</button>
+          <div class="left">
+            <button class="btn" id="btnStart">Start</button>
+            <button class="btn" id="btnPrev" disabled>Previous</button>
+            <button class="btn primary" id="btnNext" disabled>Save & Next</button>
+          </div>
+          <div class="right">
+            <button class="btn primary" id="btnComplete" disabled>Complete</button>
+          </div>
         </div>
 
-        <div class="resultBox" id="resultBox" style="display:none;"></div>
+        <div class="hint">Save & Next will store your selection for the current question.</div>
       </div>
+
+      <div class="result" id="resultBox"></div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <!-- Confirm modal -->
-  <div class="modalBackdrop" id="confirmBackdrop" role="dialog" aria-modal="true">
-    <div class="modal">
-      <h3>Confirm Submission</h3>
-      <p id="confirmText"></p>
-      <div class="modalBtns">
-        <button class="btn" id="btnGoBack">Go back</button>
-        <button class="btn primary" id="btnSubmitAnyway">Submit</button>
-      </div>
-    </div>
-  </div>
-
 <script>
-  // ====== SET THESE ======
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7sSTxroieCY1-NLxuiMrQVba0GO0R2RDSlADDTudysqw9nEgIvqwuaTbtIQHS1_qj/exec";
-  const SECRET_KEY = "PVR_MCQ_interview_2026"; // must match Apps Script
+/** =========================
+ * OPTIONAL GOOGLE SUBMIT
+ * =========================
+ * If you want to submit to Google Sheet + Drive:
+ * 1) Deploy Apps Script web app
+ * 2) Put the URL and SECRET here
+ *
+ * If you keep APPS_SCRIPT_URL empty, "Complete" will only show score locally.
+ */
+const APPS_SCRIPT_URL = "";   // e.g. "https://script.google.com/macros/s/XXXX/exec"
+const SUBMIT_SECRET = "PVR_SECRET_2026";
 
-  const PASS_PERCENT = 80;
-  const FINAL_SAVE_MESSAGE = "Answers saved. If needed please contact to PVRCLOUDTECH.";
+/** Pick fixed number of questions per attempt */
+const QUESTIONS_PER_ATTEMPT = 25;
 
-  async function loadQuestionBank(difficulty){
-  const map = {
-    basic: "data/adf_basic.json",
-    intermediate: "data/adf_intermediate.json",
-    advanced: "data/adf_advanced.json"
-  };
+/** JSON file map */
+const BANK_URL = {
+  basic: "./data/adf_basic.json",
+  intermediate: "./data/adf_intermediate.json",
+  advanced: "./data/adf_advanced.json",
+};
 
-  const url = map[difficulty];
+/** =========================
+ * STATE
+ * ========================= */
+let started = false;
+let idx = -1;
+let attempt = []; // 25 questions AFTER shuffling & option shuffle
+let chosen = {};  // idx -> selected option index (0..3)
 
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`HTTP ${res.status} → ${url}`);
+/** =========================
+ * DOM
+ * ========================= */
+const elName = document.getElementById("candidateName");
+const elDiff = document.getElementById("difficulty");
+const elPill = document.getElementById("statusPill");
+const elQMeta = document.getElementById("qMeta");
+const elQText = document.getElementById("qText");
+const elOptions = document.getElementById("options");
 
-  return await res.json();
+const btnStart = document.getElementById("btnStart");
+const btnPrev = document.getElementById("btnPrev");
+const btnNext = document.getElementById("btnNext");
+const btnComplete = document.getElementById("btnComplete");
+
+const toast = document.getElementById("toast");
+const resultBox = document.getElementById("resultBox");
+
+/** =========================
+ * HELPERS
+ * ========================= */
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=> toast.classList.remove("show"), 1600);
 }
 
-// Strong shuffle using crypto
 function shuffleCrypto(arr){
   const a = arr.slice();
-  const rand = (n) => crypto.getRandomValues(new Uint32Array(1))[0] % n;
+  const rand = (n) => (crypto.getRandomValues(new Uint32Array(1))[0] % n);
   for (let i = a.length - 1; i > 0; i--) {
     const j = rand(i + 1);
     [a[i], a[j]] = [a[j], a[i]];
@@ -230,308 +209,263 @@ function shuffleCrypto(arr){
   return a;
 }
 
-// Pick N questions, shuffle options, remap correct index
-function buildAttempt(bank, n){
-  const picked = shuffleCrypto(bank).slice(0, Math.min(n, bank.length));
+async function loadBank(difficulty){
+  const url = BANK_URL[difficulty];
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load question bank: " + url);
+  const bank = await res.json();
+  if (!Array.isArray(bank)) throw new Error("Question bank must be an array in JSON.");
+  return bank;
+}
 
-  return picked.map((qObj, serialIndex) => {
-    const originalOpts = qObj.opts.map((text, i) => ({ i, text }));
-    const shuffledOpts = shuffleCrypto(originalOpts);
+/** Build 25-question attempt:
+ * - shuffle bank
+ * - take first 25
+ * - for each question: shuffle options AND recalc correct index
+ */
+function buildAttempt(bank){
+  if (bank.length < QUESTIONS_PER_ATTEMPT){
+    throw new Error(`Bank has only ${bank.length} questions. Need at least ${QUESTIONS_PER_ATTEMPT}.`);
+  }
 
-    const newCorrect = shuffledOpts.findIndex(x => x.i === qObj.correct);
+  const picked = shuffleCrypto(bank).slice(0, QUESTIONS_PER_ATTEMPT);
+
+  return picked.map((q, qi) => {
+    const opts = (q.opts || []).map((text, i) => ({ originalIndex: i, text }));
+    const shuffledOpts = shuffleCrypto(opts);
+    const newCorrect = shuffledOpts.findIndex(o => o.originalIndex === q.correct);
 
     return {
-      id: qObj.id || String(serialIndex + 1),
-      q: qObj.q,
-      opts: shuffledOpts.map(x => x.text),
+      no: qi + 1,            // serial 1..25
+      q: q.q,
+      opts: shuffledOpts.map(o => o.text),
       correct: newCorrect
     };
   });
 }
 
-  // ====== State ======
-  let selected = []; // current attempt questions (with shuffled options baked in)
-  let idx = -1;
-  let started = false;
-  let chosen = {}; // idx -> selectedOptionIndex
+function setButtons(){
+  btnPrev.disabled = !started || idx <= 0;
+  btnNext.disabled = !started || idx < 0;
+  btnComplete.disabled = !started || attempt.length !== QUESTIONS_PER_ATTEMPT;
+}
 
-  // ====== DOM ======
-  const elName = document.getElementById('candidateName');
-  const elPhone = document.getElementById('candidatePhone');
-  const elEmail = document.getElementById('candidateEmail');
-  const elDiff = document.getElementById('difficulty');
-  const elQText = document.getElementById('qText');
-  const elQMeta = document.getElementById('qMeta');
-  const elOpts = document.getElementById('options');
-  const elPill = document.getElementById('statusPill');
-  const elResult = document.getElementById('resultBox');
-  const toast = document.getElementById('toast');
-
-  const btnStart = document.getElementById('btnStart');
-  const btnPrev = document.getElementById('btnPrev');
-  const btnNext = document.getElementById('btnNext');
-  const btnComplete = document.getElementById('btnComplete');
-
-  const confirmBackdrop = document.getElementById('confirmBackdrop');
-  const confirmText = document.getElementById('confirmText');
-  const btnGoBack = document.getElementById('btnGoBack');
-  const btnSubmitAnyway = document.getElementById('btnSubmitAnyway');
-
-  function showToast(msg){
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(()=> toast.classList.remove('show'), 1600);
+function setPill(){
+  if (!started){
+    elPill.textContent = "Not started";
+    return;
   }
-  function validateCandidateDetails(){
-    const name = (elName.value || '').trim();
-    const phone = (elPhone.value || '').trim();
-    const email = (elEmail.value || '').trim();
-  
-    const missing = [];
-    if (!name) missing.push('candidate name');
-    if (!phone) missing.push('phone number');
-    if (!email) missing.push('mail id');
-  
-    if (missing.length) {
-      // Message as per your requirement:
-      // "please enter candidate name, phone number, add mail id."
-      showToast(`Please enter ${missing.join(', ')}.`);
-      return false;
-    }
-    return true;
-  }
+  const answered = Object.keys(chosen).length;
+  elPill.textContent = `In progress: ${answered}/${QUESTIONS_PER_ATTEMPT} answered`;
+}
 
-  function shuffle(arr){
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  function setButtons(){
-    btnPrev.disabled = !started || idx <= 0;
-    btnNext.disabled = !started || idx < 0;
-    btnComplete.disabled = !started || selected.length === 0;
-  }
-
-  function countAnswered(){
-    return Object.keys(chosen).filter(k => Number.isInteger(chosen[k])).length;
-  }
-
-  function setPill(){
-    if (!started) return elPill.textContent = "Not started";
-    const answered = countAnswered();
-    elPill.textContent = `In progress: ${answered}/${selected.length} answered`;
-  }
-
-  function render(){
-    if (!started || idx < 0) {
-      elQText.innerHTML = 'Click <b>Start</b> to begin.';
-      elQMeta.textContent = '0 / 0';
-      elOpts.innerHTML = '';
-      elResult.style.display = "none";
-      setButtons();
-      setPill();
-      return;
-    }
-
-    const q = selected[idx];
-    elQText.textContent = q.q;
-    elQMeta.textContent = `${idx + 1} / ${selected.length}`;
-
-    const picked = chosen[idx];
-    elOpts.innerHTML = q.opts.map((t, oi) => {
-      const checked = picked === oi ? 'checked' : '';
-      return `
-        <label class="opt">
-          <input type="radio" name="opt" value="${oi}" ${checked}/>
-          <div>${t}</div>
-        </label>
-      `;
-    }).join('');
-
-    elOpts.querySelectorAll('input[name="opt"]').forEach(r => {
-      r.addEventListener('change', (e) => {
-        chosen[idx] = Number(e.target.value);
-        setPill();
-      });
-    });
-
+function render(){
+  if (!started || idx < 0){
+    elQMeta.textContent = `0 / ${QUESTIONS_PER_ATTEMPT}`;
+    elQText.innerHTML = `Click <b>Start</b> to begin.`;
+    elOptions.innerHTML = "";
     setButtons();
     setPill();
+    return;
   }
 
-  function computeScore(){
-    let correct = 0;
-    selected.forEach((q, i) => {
-      if (chosen[i] === q.correct) correct++;
-    });
-    const total = selected.length;
-    const percent = total ? Math.round((correct / total) * 100) : 0;
-    return { correct, total, percent };
-  }
+  const item = attempt[idx];
+  elQMeta.textContent = `${item.no} / ${QUESTIONS_PER_ATTEMPT}`;
+  elQText.textContent = item.q;
 
-  function passFailMessage(percent, difficulty){
-    if (percent >= PASS_PERCENT) {
-      return `Congratulations! You passed the ADF ${difficulty.toLowerCase()} test. Keep up the great work and continue strengthening your ADF fundamentals.`;
-    }
-    // Suggested best message for below 80%
-    return `Thanks for taking the test. Your score is ${percent}%. Don’t worry—review the topics you missed, practice a bit more, and try again. Consistency will get you there.`;
-  }
+  const selectedOpt = (chosen[idx] ?? null);
 
-  async function submitToGoogle(){
-    const candidate = (elName.value || '').trim();
-    if (!candidate) {
-      showToast("Please enter candidate name.");
-      return { ok:false, error:"Missing candidate name" };
-    }
-
-    const difficulty = (elDiff.value || "BASIC").toUpperCase();
-    const { correct, total, percent } = computeScore();
-
-    const questionsPayload = selected.map((q, i) => {
-      const selectedIndex = chosen[i];
-      return {
-        order: i + 1,
-        question: q.q,
-        selectedIndex: Number.isInteger(selectedIndex) ? selectedIndex : null,
-        selectedText: Number.isInteger(selectedIndex) ? q.opts[selectedIndex] : null,
-        correctIndex: q.correct,
-        correctText: q.opts[q.correct],
-        isCorrect: Number.isInteger(selectedIndex) && selectedIndex === q.correct
-      };
-    });
-
-    const payload = {
-      secret: SECRET_KEY,
-      candidate,
-      difficulty,
-      total,
-      correct,
-      percent,
-      questions: questionsPayload
-    };
-
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload)
-    });
-
-    return await res.json();
-  }
-
-  function openConfirmModal(answered, notAnswered){
-    confirmText.textContent =
-      `You have answered ${answered} out of ${selected.length} questions. ` +
-      `${notAnswered} question(s) are not answered yet. Are you sure you want to submit?`;
-    confirmBackdrop.style.display = "flex";
-  }
-
-  function closeConfirmModal(){
-    confirmBackdrop.style.display = "none";
-  }
-
-  async function finalizeSubmit(){
-    const difficulty = (elDiff.value || "BASIC").toUpperCase();
-    const { correct, total, percent } = computeScore();
-
-    elResult.style.display = "block";
-    elResult.innerHTML = `
-      <b>Result</b><br/>
-      Score: <b>${correct}/${total}</b><br/>
-      Percentage: <b>${percent}%</b><br/><br/>
-      <span>${passFailMessage(percent, difficulty)}</span><br/><br/>
-      <span>${FINAL_SAVE_MESSAGE}</span>
+  elOptions.innerHTML = item.opts.map((optText, oi) => {
+    const isSel = (selectedOpt === oi);
+    return `
+      <label class="opt ${isSel ? "selected" : ""}">
+        <input type="radio" name="opt" value="${oi}" ${isSel ? "checked" : ""} />
+        <div><strong>${String.fromCharCode(65 + oi)}.</strong> ${escapeHtml(optText)}</div>
+      </label>
     `;
+  }).join("");
 
-    try {
-      showToast("Submitting...");
-      const data = await submitToGoogle();
-      if (data && data.ok) {
-        showToast("Submitted successfully");
-        // Requirement: do NOT show file name/url on the page.
-      } else {
-        showToast("Submit failed");
-        // Optional: show minimal error without exposing file info
-        elResult.innerHTML += `<br/><br/> Submit failed. Please try again.`;
-      }
-    } catch (e) {
-      showToast("Network error");
-      elResult.innerHTML += `<br/><br/> Network error. Please try again.`;
-    }
+  // listen selection
+  [...elOptions.querySelectorAll('input[type="radio"]')].forEach(r => {
+    r.addEventListener("change", (e) => {
+      const v = parseInt(e.target.value, 10);
+      chosen[idx] = v;
+      render(); // update highlight
+      setPill();
+    });
+  });
+
+  setButtons();
+  setPill();
+}
+
+function escapeHtml(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function calcScore(){
+  let correct = 0;
+  for (let i = 0; i < attempt.length; i++){
+    const ans = chosen[i];
+    if (ans === attempt[i].correct) correct++;
+  }
+  const total = attempt.length;
+  const percent = Math.round((correct / total) * 100);
+  return { correct, total, percent };
+}
+
+function unansweredCount(){
+  let miss = 0;
+  for (let i = 0; i < attempt.length; i++){
+    if (chosen[i] === undefined) miss++;
+  }
+  return miss;
+}
+
+/** Build payload for Apps Script */
+function buildSubmitPayload(){
+  const name = (elName.value || "").trim() || "Candidate";
+  const difficulty = elDiff.value;
+  const ts = new Date().toISOString();
+  const score = calcScore();
+
+  const answers = attempt.map((q, i) => ({
+    no: q.no,
+    question: q.q,
+    options: q.opts,
+    selectedIndex: (chosen[i] ?? null),
+    correctIndex: q.correct,
+    isCorrect: (chosen[i] === q.correct)
+  }));
+
+  return {
+    secret: SUBMIT_SECRET,
+    name,
+    difficulty,
+    createdAt: ts,
+    score,
+    answers
+  };
+}
+
+async function submitToGoogleIfEnabled(){
+  if (!APPS_SCRIPT_URL) return { skipped: true };
+
+  const payload = buildSubmitPayload();
+  const res = await fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) throw new Error("Submit failed");
+  return await res.json().catch(()=> ({}));
+}
+
+/** =========================
+ * EVENTS
+ * ========================= */
+btnStart.addEventListener("click", async () => {
+  resultBox.style.display = "none";
+  resultBox.innerHTML = "";
+
+  const name = (elName.value || "").trim();
+  if (!name){
+    showToast("Please enter candidate name.");
+    return;
   }
 
-  // ====== Events ======
-  btnStart.addEventListener("click", async () => {
-  if (!validateCandidateDetails()) return;
-
-  try {
-    const n = 25; // always pick 25
-    const diff = elDiff.value; // basic/intermediate/advanced
-
-    const bank = await loadQuestionBank(diff);
-
-    if (!Array.isArray(bank) || bank.length === 0) {
-      showToast("Question bank is empty.");
-      return;
-    }
-
-    selected = buildAttempt(bank, n); // shuffle + pick 25
+  try{
+    const bank = await loadBank(elDiff.value);
+    attempt = buildAttempt(bank);  // ALWAYS 25
     chosen = {};
     idx = 0;
     started = true;
-
-    showToast(`Started: ${selected.length} questions`);
+    showToast("Started: 25 questions");
     render();
-  } catch (e) {
-    console.error("LOAD ERROR:", e);
-    showToast("Error loading questions. Check JSON file name/path.");
+  }catch(e){
+    console.error(e);
+    showToast("Error loading questions. Check JSON path/format.");
   }
 });
 
-
-  btnPrev.addEventListener('click', () => {
-    idx = Math.max(0, idx - 1);
-    render();
-  });
-
-  btnNext.addEventListener('click', () => {
-    // Save&Next requires selection
-    if (!Number.isInteger(chosen[idx])) {
-      showToast("Please select an option before moving next.");
-      return;
-    }
-    if (idx < selected.length - 1) idx += 1;
-    render();
-  });
-
-  btnComplete.addEventListener('click', () => {
-    // Confirm unanswered before submit
-    const answered = countAnswered();
-    const notAnswered = selected.length - answered;
-
-    if (notAnswered > 0) {
-      openConfirmModal(answered, notAnswered);
-      return;
-    }
-
-    // If all answered, submit directly
-    finalizeSubmit();
-  });
-
-  btnGoBack.addEventListener('click', () => {
-    closeConfirmModal();
-  });
-
-  btnSubmitAnyway.addEventListener('click', () => {
-    closeConfirmModal();
-    finalizeSubmit();
-  });
-
+btnPrev.addEventListener("click", () => {
+  if (!started) return;
+  idx = Math.max(0, idx - 1);
   render();
+});
+
+btnNext.addEventListener("click", () => {
+  if (!started) return;
+
+  // Save current selection already stored in `chosen[idx]`
+  if (idx < attempt.length - 1){
+    idx += 1;
+    render();
+  } else {
+    showToast("Last question reached. Click Complete.");
+  }
+});
+
+btnComplete.addEventListener("click", async () => {
+  if (!started) return;
+
+  const miss = unansweredCount();
+  if (miss > 0){
+    const ok = confirm(`${miss} question(s) are not answered yet.\nAre you sure to submit?`);
+    if (!ok) return;
+  }
+
+  const { correct, total, percent } = calcScore();
+
+  // show result
+  const pass = percent >= 80;
+  const msg = pass
+    ? `Congratulations! You passed the test (${percent}%).`
+    : `Sorry, your score is ${percent}%. Please try again after more preparation.`;
+
+  resultBox.style.display = "block";
+  resultBox.innerHTML = `
+    <div><strong>Score:</strong> ${correct} / ${total} (${percent}%)</div>
+    <div style="margin-top:6px;" class="${pass ? "ok" : "bad"}"><strong>${msg}</strong></div>
+    <div style="margin-top:10px; color: var(--muted); font-size:12px;">
+      Answers saved. if needed please contact to PVRCLOUDTECH.
+    </div>
+  `;
+
+  // submit to google if enabled
+  try{
+    if (APPS_SCRIPT_URL){
+      showToast("Submitting to Google...");
+      await submitToGoogleIfEnabled();
+      showToast("Submitted successfully.");
+    } else {
+      // no submit - just local result
+      showToast("Completed.");
+    }
+  }catch(e){
+    console.error(e);
+    showToast("Submit failed. Please contact PVRCLOUDTECH.");
+  }
+
+  // lock UI after complete
+  btnNext.disabled = true;
+  btnPrev.disabled = true;
+  btnComplete.disabled = true;
+  btnStart.disabled = true;
+  elDiff.disabled = true;
+  elName.disabled = true;
+  started = false;
+  elPill.textContent = "Completed";
+});
+
+/** Initial render */
+render();
 </script>
 </body>
 </html>
