@@ -377,13 +377,8 @@ body::before{
     const answered=countAnswered();
     answered<selected.length ? openConfirmModal(answered) : finalizeSubmit();
   };
-  btnGoBack.addEventListener("click", () => {
-  closeConfirmModal();
-});
-btnSubmitAnyway.addEventListener("click", () => {
-  closeConfirmModal();
-  finalizeSubmit();
-});
+  btnGoBack.onclick=closeConfirmModal;
+  btnSubmitAnyway.onclick=finalizeSubmit;
 </script>
 </body>
 </html>
