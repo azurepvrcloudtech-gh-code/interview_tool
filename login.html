@@ -100,14 +100,29 @@
   }
 
   async function post(action, extra){
-    const payload = Object.assign({ secret: SECRET_KEY, action }, extra || {});
-    const res = await fetch(APPS_SCRIPT_URL, {
+  const payload = Object.assign({ secret: SECRET_KEY, action }, extra || {});
+  let res;
+  try {
+    res = await fetch(APPS_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      redirect: "follow"
     });
-    return await res.json();
+  } catch (err) {
+    showToast("Fetch failed: " + err.message);
+    throw err;
   }
+
+  const text = await res.text(); // read raw
+  try {
+    return JSON.parse(text);
+  } catch {
+    // shows you if Apps Script returned HTML/login page/etc.
+    return { ok:false, error: "Non-JSON response: " + text.slice(0, 160) };
+  }
+}
+
 
   btnSendOtp.addEventListener('click', async () => {
     const name = (elName.value || '').trim();
@@ -167,4 +182,5 @@
 </script>
 </body>
 </html>
+
 
