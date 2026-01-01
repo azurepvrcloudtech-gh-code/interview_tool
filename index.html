@@ -206,15 +206,17 @@ body::before{
 
   async function loadQuestionBank(difficulty){
   const map = {
-    basic: "./data/adf_basic.json",
-    intermediate: "./data/adf_intermediate.json",
-    advanced: "./data/adf_advanced.json"
+    basic: "data/adf_basic.json",
+    intermediate: "data/adf_intermediate.json",
+    advanced: "data/adf_advanced.json"
   };
+
   const url = map[difficulty];
+
   const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to load bank: ${url}`);
-  const bank = await res.json();
-  return bank;
+  if (!res.ok) throw new Error(`HTTP ${res.status} → ${url}`);
+
+  return await res.json();
 }
 
 // Strong shuffle using crypto
@@ -322,23 +324,6 @@ function buildAttempt(bank, n){
     if (!started) return elPill.textContent = "Not started";
     const answered = countAnswered();
     elPill.textContent = `In progress: ${answered}/${selected.length} answered`;
-  }
-
-  function createAttemptQuestions(diff){
-    // shuffle questions every Start
-    const qs = shuffle(BANK[diff]).slice(0, 25);
-
-    // shuffle options for each question and preserve correct mapping
-    return qs.map(q => {
-      const options = q.opts.map((t, i) => ({ key: i, text: t })); // key = original index
-      const shuffledOpts = shuffle(options);
-      const correctIndex = shuffledOpts.findIndex(o => o.key === q.correct);
-      return {
-        q: q.q,
-        opts: shuffledOpts.map(o => o.text),
-        correct: correctIndex
-      };
-    });
   }
 
   function render(){
@@ -482,29 +467,31 @@ function buildAttempt(bank, n){
   // ====== Events ======
   btnStart.addEventListener("click", async () => {
   if (!validateCandidateDetails()) return;
+
   try {
-    const n = parseInt(elCount.value, 10) || 25;
-    const diff = document.getElementById("difficulty").value; // basic/intermediate/advanced
+    const n = 25; // always pick 25
+    const diff = elDiff.value; // basic/intermediate/advanced
 
     const bank = await loadQuestionBank(diff);
 
-    if (!Array.isArray(bank) || bank.length < 25) {
-      showToast("Question bank must have at least 25 questions.");
+    if (!Array.isArray(bank) || bank.length === 0) {
+      showToast("Question bank is empty.");
       return;
     }
 
-    selected = buildAttempt(bank, n);   // ✅ random 25 each attempt
-    answers = {};
+    selected = buildAttempt(bank, n); // shuffle + pick 25
+    chosen = {};
     idx = 0;
     started = true;
 
     showToast(`Started: ${selected.length} questions`);
     render();
   } catch (e) {
-    console.error(e);
+    console.error("LOAD ERROR:", e);
     showToast("Error loading questions. Check JSON file name/path.");
   }
 });
+
 
   btnPrev.addEventListener('click', () => {
     idx = Math.max(0, idx - 1);
