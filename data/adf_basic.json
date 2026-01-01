@@ -1,0 +1,662 @@
+[
+  {
+    "q": "Azure Data Factory (ADF) is primarily used for:",
+    "opts": [
+      "Endpoint security scanning",
+      "Data integration and orchestration",
+      "Creating virtual machines",
+      "Managing DNS records"
+    ],
+    "correct": 1,
+    "id": "ADF-B-001"
+  },
+  {
+    "q": "In ADF, a pipeline is best described as a:",
+    "opts": [
+      "SQL stored procedure",
+      "Logical grouping of activities",
+      "Blob container",
+      "Resource group"
+    ],
+    "correct": 1,
+    "id": "ADF-B-002"
+  },
+  {
+    "q": "A Linked Service in ADF represents:",
+    "opts": [
+      "A folder path in ADLS",
+      "A connection to a data store or compute",
+      "A Power BI dataset",
+      "A trigger schedule"
+    ],
+    "correct": 1,
+    "id": "ADF-B-003"
+  },
+  {
+    "q": "A Dataset in ADF represents:",
+    "opts": [
+      "A deployment template",
+      "A named view of data within a linked service",
+      "An Azure subscription",
+      "A managed identity"
+    ],
+    "correct": 1,
+    "id": "ADF-B-004"
+  },
+  {
+    "q": "Which activity is commonly used to move data between sources and sinks in ADF?",
+    "opts": [
+      "Lookup",
+      "Copy",
+      "Set Variable",
+      "Wait"
+    ],
+    "correct": 1,
+    "id": "ADF-B-005"
+  },
+  {
+    "q": "Which ADF component defines WHEN a pipeline runs?",
+    "opts": [
+      "Linked Service",
+      "Trigger",
+      "Dataset",
+      "Integration Runtime"
+    ],
+    "correct": 1,
+    "id": "ADF-B-006"
+  },
+  {
+    "q": "Which trigger type runs pipelines on a time-based schedule?",
+    "opts": [
+      "Event trigger",
+      "Schedule trigger",
+      "Custom trigger",
+      "Manual trigger only"
+    ],
+    "correct": 1,
+    "id": "ADF-B-007"
+  },
+  {
+    "q": "Which trigger type is designed for fixed, non-overlapping time windows?",
+    "opts": [
+      "Schedule trigger",
+      "Tumbling Window trigger",
+      "Event trigger",
+      "Debug trigger"
+    ],
+    "correct": 1,
+    "id": "ADF-B-008"
+  },
+  {
+    "q": "Event-based triggers in ADF are commonly built on top of:",
+    "opts": [
+      "Azure Event Grid",
+      "Azure DevOps",
+      "Azure Monitor Logs",
+      "Azure DNS"
+    ],
+    "correct": 0,
+    "id": "ADF-B-009"
+  },
+  {
+    "q": "To run a pipeline immediately for testing, you typically use:",
+    "opts": [
+      "Publish only",
+      "Debug run",
+      "ARM deployment",
+      "Integration Runtime restart"
+    ],
+    "correct": 1,
+    "id": "ADF-B-010"
+  },
+  {
+    "q": "Which Integration Runtime is used to copy data within Azure services (cloud-to-cloud) by default?",
+    "opts": [
+      "Self-hosted IR",
+      "Azure Integration Runtime",
+      "Azure-SSIS IR",
+      "On-prem IR"
+    ],
+    "correct": 1,
+    "id": "ADF-B-011"
+  },
+  {
+    "q": "Which Integration Runtime is required to connect to on-premises data sources without opening inbound firewall ports?",
+    "opts": [
+      "Azure Integration Runtime",
+      "Self-hosted Integration Runtime",
+      "Auto-resolve IR",
+      "Azure-SSIS IR"
+    ],
+    "correct": 1,
+    "id": "ADF-B-012"
+  },
+  {
+    "q": "Auto-resolve Integration Runtime primarily helps by:",
+    "opts": [
+      "Choosing the nearest Azure IR region automatically",
+      "Running SSIS packages",
+      "Hosting Spark clusters",
+      "Creating managed private endpoints"
+    ],
+    "correct": 0,
+    "id": "ADF-B-013"
+  },
+  {
+    "q": "A common authentication method to connect ADF to ADLS Gen2 securely is:",
+    "opts": [
+      "Anonymous access",
+      "Managed Identity",
+      "Hardcoded password in pipeline",
+      "FTP username"
+    ],
+    "correct": 1,
+    "id": "ADF-B-014"
+  },
+  {
+    "q": "Which service is typically used to store secrets (keys, passwords) for ADF pipelines?",
+    "opts": [
+      "Azure Key Vault",
+      "Azure Monitor",
+      "Azure Policy",
+      "Azure Advisor"
+    ],
+    "correct": 0,
+    "id": "ADF-B-015"
+  },
+  {
+    "q": "In ADF, parameters are primarily used to:",
+    "opts": [
+      "Store temporary runtime values that change during execution",
+      "Provide values at run time to make pipelines/datasets reusable",
+      "Encrypt data at rest",
+      "Scale Integration Runtime nodes"
+    ],
+    "correct": 1,
+    "id": "ADF-B-016"
+  },
+  {
+    "q": "In ADF, variables are primarily used to:",
+    "opts": [
+      "Hold runtime values during pipeline execution",
+      "Define a connection string",
+      "Schedule pipeline execution",
+      "Create a linked service"
+    ],
+    "correct": 0,
+    "id": "ADF-B-017"
+  },
+  {
+    "q": "Which activity is used to retrieve a small set of rows (often one row) from a source?",
+    "opts": [
+      "Lookup",
+      "Copy",
+      "Execute Data Flow",
+      "Until"
+    ],
+    "correct": 0,
+    "id": "ADF-B-018"
+  },
+  {
+    "q": "Which activity is used to get file/folder metadata such as size or last modified?",
+    "opts": [
+      "Get Metadata",
+      "Web",
+      "Filter",
+      "Switch"
+    ],
+    "correct": 0,
+    "id": "ADF-B-019"
+  },
+  {
+    "q": "Control Flow in ADF is mainly used for:",
+    "opts": [
+      "Row-by-row transformations",
+      "Orchestrating activities and dependencies",
+      "Running Spark code directly",
+      "Creating SQL indexes"
+    ],
+    "correct": 1,
+    "id": "ADF-B-020"
+  },
+  {
+    "q": "Mapping Data Flows in ADF are primarily used for:",
+    "opts": [
+      "Graphical data transformations",
+      "Creating Event Grid subscriptions",
+      "Managing RBAC",
+      "Scheduling runs"
+    ],
+    "correct": 0,
+    "id": "ADF-B-021"
+  },
+  {
+    "q": "Which activity can call an external REST endpoint?",
+    "opts": [
+      "Web activity",
+      "Wait activity",
+      "Filter activity",
+      "Fail activity"
+    ],
+    "correct": 0,
+    "id": "ADF-B-022"
+  },
+  {
+    "q": "Which activity is used to intentionally stop a pipeline with an error?",
+    "opts": [
+      "Fail activity",
+      "Wait activity",
+      "Append variable",
+      "Until activity"
+    ],
+    "correct": 0,
+    "id": "ADF-B-023"
+  },
+  {
+    "q": "A pipeline can be executed by:",
+    "opts": [
+      "Trigger, manual run, or another pipeline",
+      "Only by schedule triggers",
+      "Only from Azure DevOps",
+      "Only from Databricks"
+    ],
+    "correct": 0,
+    "id": "ADF-B-024"
+  },
+  {
+    "q": "In ADF, an activity dependency condition can be:",
+    "opts": [
+      "Succeeded, Failed, Skipped, or Completed",
+      "Approved, Rejected, Pending, Closed",
+      "Insert, Update, Delete, Merge",
+      "Read, Write, Execute, Owner"
+    ],
+    "correct": 0,
+    "id": "ADF-B-025"
+  },
+  {
+    "q": "Which activity is used to pause execution for a set time?",
+    "opts": [
+      "Wait",
+      "Set Variable",
+      "Lookup",
+      "Until"
+    ],
+    "correct": 0,
+    "id": "ADF-B-026"
+  },
+  {
+    "q": "The ADF monitoring experience is primarily available in:",
+    "opts": [
+      "Monitor hub",
+      "Power BI desktop",
+      "Azure Cost Management only",
+      "ADLS Explorer"
+    ],
+    "correct": 0,
+    "id": "ADF-B-027"
+  },
+  {
+    "q": "Which is a correct way to logically separate environments for ADF deployments?",
+    "opts": [
+      "Use separate resource groups/factories for dev/test/prod",
+      "Use only one factory and rename pipelines daily",
+      "Store prod secrets in pipeline code",
+      "Disable publishing"
+    ],
+    "correct": 0,
+    "id": "ADF-B-028"
+  },
+  {
+    "q": "Which storage is optimized for hierarchical, big-data analytics workloads compared to Blob Storage?",
+    "opts": [
+      "Azure Data Lake Storage Gen2",
+      "Azure Queue Storage",
+      "Azure Table Storage",
+      "Azure Files"
+    ],
+    "correct": 0,
+    "id": "ADF-B-029"
+  },
+  {
+    "q": "ADLS Gen2 provides which feature that classic Blob Storage does not (by default)?",
+    "opts": [
+      "Hierarchical namespace",
+      "REST API support",
+      "Encryption at rest",
+      "Hot/Cool tiers"
+    ],
+    "correct": 0,
+    "id": "ADF-B-030"
+  },
+  {
+    "q": "RBAC in Azure is primarily used to:",
+    "opts": [
+      "Assign permissions to users/groups at scopes like subscription/resource group",
+      "Compress parquet files",
+      "Trigger pipelines on file arrival",
+      "Create SQL schemas"
+    ],
+    "correct": 0,
+    "id": "ADF-B-031"
+  },
+  {
+    "q": "A common way to grant ADF access to ADLS without secrets is to use:",
+    "opts": [
+      "Managed Identity + RBAC/ACLs",
+      "SAS token stored in code",
+      "Personal account key emailed to team",
+      "Anonymous access"
+    ],
+    "correct": 0,
+    "id": "ADF-B-032"
+  },
+  {
+    "q": "Which identity option is best for ADF-to-Azure resource access in most enterprises?",
+    "opts": [
+      "System-assigned or user-assigned managed identity",
+      "Shared access signature always",
+      "Storage account access key always",
+      "Plain-text username/password"
+    ],
+    "correct": 0,
+    "id": "ADF-B-033"
+  },
+  {
+    "q": "Service Principal authentication is based on:",
+    "opts": [
+      "Azure AD application (client id/secret or certificate)",
+      "One-time URL token only",
+      "Local machine password",
+      "SQL DTU settings"
+    ],
+    "correct": 0,
+    "id": "ADF-B-034"
+  },
+  {
+    "q": "A SAS token is best described as:",
+    "opts": [
+      "A time-bound token granting scoped access to storage resources",
+      "A permanent storage master key",
+      "A database role",
+      "A virtual network route"
+    ],
+    "correct": 0,
+    "id": "ADF-B-035"
+  },
+  {
+    "q": "Which is a typical use case for a Schedule Trigger?",
+    "opts": [
+      "Run a pipeline daily at 2 AM",
+      "Run when a blob is created",
+      "Run only after another factory publishes",
+      "Run only when an SSIS package finishes"
+    ],
+    "correct": 0,
+    "id": "ADF-B-036"
+  },
+  {
+    "q": "Which is a typical use case for an Event Trigger?",
+    "opts": [
+      "Run when a file arrives in a storage container",
+      "Run every hour regardless of files",
+      "Run in fixed windows with backfill",
+      "Run once a month only"
+    ],
+    "correct": 0,
+    "id": "ADF-B-037"
+  },
+  {
+    "q": "Which activity is best for iterating over an array of items?",
+    "opts": [
+      "ForEach",
+      "Switch",
+      "Wait",
+      "Web"
+    ],
+    "correct": 0,
+    "id": "ADF-B-038"
+  },
+  {
+    "q": "ADF supports nesting ForEach activities:",
+    "opts": [
+      "Yes, but monitor performance and use batch/concurrency carefully",
+      "No, nesting is not allowed",
+      "Only in Mapping Data Flows",
+      "Only in SSIS IR"
+    ],
+    "correct": 0,
+    "id": "ADF-B-039"
+  },
+  {
+    "q": "ADF supports nesting If Condition activities:",
+    "opts": [
+      "Yes, you can nest If conditions as needed",
+      "No, only one If per pipeline",
+      "Only in Debug mode",
+      "Only with Schedule triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-B-040"
+  },
+  {
+    "q": "The purpose of Azure Key Vault integration in ADF is to:",
+    "opts": [
+      "Reference secrets securely at runtime",
+      "Store parquet files",
+      "Execute Spark notebooks",
+      "Create SQL indexes"
+    ],
+    "correct": 0,
+    "id": "ADF-B-041"
+  },
+  {
+    "q": "Which of these is NOT a common ADF activity category?",
+    "opts": [
+      "Movement",
+      "Transformation",
+      "Control",
+      "Virtual Machine Provisioning"
+    ],
+    "correct": 3,
+    "id": "ADF-B-042"
+  },
+  {
+    "q": "Copy Activity performance can often be improved by:",
+    "opts": [
+      "Enabling parallel copy/partitioning when supported",
+      "Turning off integration runtime",
+      "Using smaller datasets always",
+      "Disabling retries"
+    ],
+    "correct": 0,
+    "id": "ADF-B-043"
+  },
+  {
+    "q": "A common file format for analytics in ADLS is:",
+    "opts": [
+      "Parquet",
+      "BMP",
+      "MP3",
+      "EXE"
+    ],
+    "correct": 0,
+    "id": "ADF-B-044"
+  },
+  {
+    "q": "In ADF, publishing is required to:",
+    "opts": [
+      "Save changes from collaboration (Git) branch into live factory",
+      "Run Debug sessions",
+      "Create a dataset",
+      "Enable managed identity"
+    ],
+    "correct": 0,
+    "id": "ADF-B-045"
+  },
+  {
+    "q": "A linked service to Azure SQL Database typically requires:",
+    "opts": [
+      "Server/database connection details and authentication",
+      "A tumbling window schedule",
+      "A blob event subscription",
+      "A Spark cluster size"
+    ],
+    "correct": 0,
+    "id": "ADF-B-046"
+  },
+  {
+    "q": "A typical approach to secure pipeline secrets is:",
+    "opts": [
+      "Store secrets in Key Vault and reference them",
+      "Hardcode secrets in pipeline JSON",
+      "Share secrets via chat and paste in UI",
+      "Disable authentication"
+    ],
+    "correct": 0,
+    "id": "ADF-B-047"
+  },
+  {
+    "q": "Which statement about ETL vs ELT is correct?",
+    "opts": [
+      "ETL transforms before loading; ELT loads before transforming",
+      "ETL loads before transforming; ELT transforms before loading",
+      "They are identical terms",
+      "ETL requires Databricks always"
+    ],
+    "correct": 0,
+    "id": "ADF-B-048"
+  },
+  {
+    "q": "ADF can support ETL/ELT by orchestrating:",
+    "opts": [
+      "Data movement + transformations across services",
+      "Only virtual networks",
+      "Only user management",
+      "Only DNS configuration"
+    ],
+    "correct": 0,
+    "id": "ADF-B-049"
+  },
+  {
+    "q": "A common way to trigger downstream activities only when Copy succeeds is to use:",
+    "opts": [
+      "Activity dependency on Succeeded",
+      "A separate data factory",
+      "A storage access key rotation",
+      "A DTU increase"
+    ],
+    "correct": 0,
+    "id": "ADF-B-050"
+  },
+  {
+    "q": "The main difference between Linked Service and Dataset is:",
+    "opts": [
+      "Linked Service = connection; Dataset = data structure/location within it",
+      "Linked Service = table; Dataset = trigger",
+      "Linked Service = pipeline; Dataset = activity",
+      "Linked Service = VNet; Dataset = subnet"
+    ],
+    "correct": 0,
+    "id": "ADF-B-051"
+  },
+  {
+    "q": "An ADF pipeline run ID is mainly used to:",
+    "opts": [
+      "Trace and troubleshoot a specific execution",
+      "Encrypt data at rest",
+      "Resize Azure SQL compute",
+      "Create a storage container"
+    ],
+    "correct": 0,
+    "id": "ADF-B-052"
+  },
+  {
+    "q": "In Azure SQL Database, Dynamic Data Masking is primarily used to:",
+    "opts": [
+      "Hide sensitive data from non-privileged users in query results",
+      "Encrypt backups",
+      "Increase DTUs",
+      "Replicate data to another region"
+    ],
+    "correct": 0,
+    "id": "ADF-B-053"
+  },
+  {
+    "q": "Transparent Data Encryption (TDE) in Azure SQL primarily provides:",
+    "opts": [
+      "Encryption at rest for database files and backups",
+      "Row-level masking",
+      "Column reordering",
+      "Query plan caching"
+    ],
+    "correct": 0,
+    "id": "ADF-B-054"
+  },
+  {
+    "q": "A basic way to handle failures in ADF is to configure:",
+    "opts": [
+      "Retry and timeout policies on activities",
+      "Only more triggers",
+      "Only more linked services",
+      "Only more datasets"
+    ],
+    "correct": 0,
+    "id": "ADF-B-055"
+  },
+  {
+    "q": "Which is the best place to track pipeline success/failure trends over time?",
+    "opts": [
+      "Azure Monitor / Log Analytics integration",
+      "Only the Debug output",
+      "ADLS folder names",
+      "A local text file"
+    ],
+    "correct": 0,
+    "id": "ADF-B-056"
+  },
+  {
+    "q": "In ADLS, access control can be managed using:",
+    "opts": [
+      "RBAC and POSIX-like ACLs",
+      "Only SAS tokens",
+      "Only access keys",
+      "Only SQL roles"
+    ],
+    "correct": 0,
+    "id": "ADF-B-057"
+  },
+  {
+    "q": "A common way to organize a data lake is by:",
+    "opts": [
+      "Bronze/Silver/Gold zones or Raw/Curated/Serving layers",
+      "Putting all files in one flat folder forever",
+      "Storing only CSVs",
+      "Avoiding partitions"
+    ],
+    "correct": 0,
+    "id": "ADF-B-058"
+  },
+  {
+    "q": "For incremental loads, a common pattern is to store and reuse:",
+    "opts": [
+      "Watermark/last successful load timestamp",
+      "A random number",
+      "VM size",
+      "Blob tier"
+    ],
+    "correct": 0,
+    "id": "ADF-B-059"
+  },
+  {
+    "q": "Git integration in ADF is mainly used to:",
+    "opts": [
+      "Enable source control and collaboration for ADF code",
+      "Increase storage capacity",
+      "Replace Integration Runtime",
+      "Mask Azure SQL data"
+    ],
+    "correct": 0,
+    "id": "ADF-B-060"
+  }
+]

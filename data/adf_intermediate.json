@@ -1,0 +1,662 @@
+[
+  {
+    "q": "To call an external REST API in ADF and store the response, you typically use:",
+    "opts": [
+      "Web activity (optionally with Copy/Lookup depending on source)",
+      "Wait activity",
+      "Delete activity",
+      "Switch activity"
+    ],
+    "correct": 0,
+    "id": "ADF-I-001"
+  },
+  {
+    "q": "When an Event Trigger is used for blob file arrival, ADF usually receives the event from:",
+    "opts": [
+      "Event Grid subscription to Storage events",
+      "Azure DevOps pipeline",
+      "SQL Agent job",
+      "Azure Advisor"
+    ],
+    "correct": 0,
+    "id": "ADF-I-002"
+  },
+  {
+    "q": "For copying from on-premises SQL Server to ADLS, which IR is required?",
+    "opts": [
+      "Self-hosted Integration Runtime",
+      "Azure-SSIS Integration Runtime",
+      "Auto-resolve IR only",
+      "No IR is needed"
+    ],
+    "correct": 0,
+    "id": "ADF-I-003"
+  },
+  {
+    "q": "A key difference between Self-hosted IR and Azure IR is:",
+    "opts": [
+      "Self-hosted runs on your network; Azure IR runs in Azure-managed infrastructure",
+      "Self-hosted supports only Azure sources",
+      "Azure IR requires inbound firewall ports on-prem",
+      "They are the same"
+    ],
+    "correct": 0,
+    "id": "ADF-I-004"
+  },
+  {
+    "q": "Which authentication is best to connect ADF to ADLS Gen2 without storing secrets?",
+    "opts": [
+      "Managed identity",
+      "Storage account access key",
+      "SAS token in pipeline variable",
+      "Username/password"
+    ],
+    "correct": 0,
+    "id": "ADF-I-005"
+  },
+  {
+    "q": "Service Principal vs SAS token—what’s correct?",
+    "opts": [
+      "Service Principal is Azure AD identity; SAS is a scoped, time-bound storage token",
+      "SAS is an Azure AD identity; Service Principal is a storage key",
+      "Both are identical",
+      "Both require interactive login"
+    ],
+    "correct": 0,
+    "id": "ADF-I-006"
+  },
+  {
+    "q": "Which trigger is best when you need guaranteed processing for every hourly window with no overlap?",
+    "opts": [
+      "Tumbling Window trigger",
+      "Schedule trigger",
+      "Event trigger",
+      "Manual trigger"
+    ],
+    "correct": 0,
+    "id": "ADF-I-007"
+  },
+  {
+    "q": "A Tumbling Window trigger supports which feature especially useful for recovery?",
+    "opts": [
+      "Backfill (rerun missed windows)",
+      "Blob created events",
+      "Interactive debugging",
+      "Real-time streaming only"
+    ],
+    "correct": 0,
+    "id": "ADF-I-008"
+  },
+  {
+    "q": "Which ADF activity is best suited to read configuration rows (e.g., table list) to drive a metadata-driven pipeline?",
+    "opts": [
+      "Lookup",
+      "Wait",
+      "Delete",
+      "Web (only)"
+    ],
+    "correct": 0,
+    "id": "ADF-I-009"
+  },
+  {
+    "q": "Get Metadata activity can return which of the following about a folder?",
+    "opts": [
+      "Child items list",
+      "SQL query results",
+      "Spark dataframe schema",
+      "Azure RBAC role assignments"
+    ],
+    "correct": 0,
+    "id": "ADF-I-010"
+  },
+  {
+    "q": "Why might you choose Lookup over Get Metadata for control flow decisions?",
+    "opts": [
+      "Lookup can execute queries and return rows/values from a data source",
+      "Lookup can only list folders",
+      "Get Metadata can execute SQL queries",
+      "They are identical"
+    ],
+    "correct": 0,
+    "id": "ADF-I-011"
+  },
+  {
+    "q": "In ADF, parameters are evaluated:",
+    "opts": [
+      "At runtime and can be passed from triggers/pipeline runs",
+      "Only at publish time",
+      "Only in Git mode",
+      "Only inside Azure DevOps"
+    ],
+    "correct": 0,
+    "id": "ADF-I-012"
+  },
+  {
+    "q": "A common use of variables in ADF is to:",
+    "opts": [
+      "Accumulate state across activities (e.g., file name, counters)",
+      "Define linked service credentials",
+      "Choose the IR region permanently",
+      "Create storage accounts"
+    ],
+    "correct": 0,
+    "id": "ADF-I-013"
+  },
+  {
+    "q": "When processing many files, which combination is best for performance and stability?",
+    "opts": [
+      "ForEach with batch count/concurrency tuned",
+      "Nested Switch with no limits",
+      "Wait after every file",
+      "One pipeline per file manually"
+    ],
+    "correct": 0,
+    "id": "ADF-I-014"
+  },
+  {
+    "q": "Which is a typical optimization for Copy Activity when reading from SQL sources?",
+    "opts": [
+      "Partitioning by a column and enabling parallelism",
+      "Always using single-threaded copy",
+      "Disabling staging",
+      "Increasing dataset JSON size"
+    ],
+    "correct": 0,
+    "id": "ADF-I-015"
+  },
+  {
+    "q": "For large data movement, staging in Copy Activity can help by:",
+    "opts": [
+      "Improving throughput by using intermediate storage and optimized transfer paths",
+      "Reducing encryption at rest",
+      "Disabling retries",
+      "Avoiding linked services"
+    ],
+    "correct": 0,
+    "id": "ADF-I-016"
+  },
+  {
+    "q": "Which option helps handle schema drift in Mapping Data Flows?",
+    "opts": [
+      "Allow schema drift",
+      "Disable debug",
+      "Force fixed schema always",
+      "Use only Schedule triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-I-017"
+  },
+  {
+    "q": "If new columns arrive unexpectedly and you want pipelines not to break, a good approach is:",
+    "opts": [
+      "Use schema drift/auto-mapping where appropriate and design tolerant sink mappings",
+      "Hardcode every column forever",
+      "Disable all validations",
+      "Avoid data flows"
+    ],
+    "correct": 0,
+    "id": "ADF-I-018"
+  },
+  {
+    "q": "How do you typically secure secrets for ADF CI/CD deployments?",
+    "opts": [
+      "Store secrets in Key Vault per environment and reference via linked services",
+      "Commit secrets to Git",
+      "Share secrets in release notes",
+      "Put secrets in dataset names"
+    ],
+    "correct": 0,
+    "id": "ADF-I-019"
+  },
+  {
+    "q": "ADF CI/CD commonly deploys using:",
+    "opts": [
+      "ARM templates (or ADF publish artifacts) via Azure DevOps/GitHub Actions",
+      "Manual copy-paste only",
+      "SQL Agent jobs",
+      "Azure Portal export of ADLS folders"
+    ],
+    "correct": 0,
+    "id": "ADF-I-020"
+  },
+  {
+    "q": "Why use separate factories or environments for dev/test/prod?",
+    "opts": [
+      "To isolate permissions, connections, and change risk",
+      "To avoid needing IR",
+      "To eliminate triggers",
+      "To disable monitoring"
+    ],
+    "correct": 0,
+    "id": "ADF-I-021"
+  },
+  {
+    "q": "Which monitoring feature helps identify slow activities and bottlenecks?",
+    "opts": [
+      "Pipeline run details with activity duration metrics (and Log Analytics)",
+      "Only the Git history",
+      "Blob container properties",
+      "Azure SQL DTU chart only"
+    ],
+    "correct": 0,
+    "id": "ADF-I-022"
+  },
+  {
+    "q": "A good practice for pipeline error handling is:",
+    "opts": [
+      "Use failure dependencies, retries, and centralized logging/alerts",
+      "Ignore failures and rerun manually",
+      "Disable timeouts",
+      "Use only one giant pipeline"
+    ],
+    "correct": 0,
+    "id": "ADF-I-023"
+  },
+  {
+    "q": "To mask sensitive data in Azure SQL, which technique hides data in query results for certain users?",
+    "opts": [
+      "Dynamic Data Masking",
+      "TDE",
+      "Geo-replication",
+      "Partitioning"
+    ],
+    "correct": 0,
+    "id": "ADF-I-024"
+  },
+  {
+    "q": "Which Azure SQL feature provides fine-grained access so users see only allowed rows?",
+    "opts": [
+      "Row-Level Security (RLS)",
+      "TDE",
+      "DDM",
+      "Elastic pools"
+    ],
+    "correct": 0,
+    "id": "ADF-I-025"
+  },
+  {
+    "q": "Encrypting data in transit to Azure SQL commonly uses:",
+    "opts": [
+      "TLS/SSL connections",
+      "DTUs",
+      "Index rebuilds",
+      "File compression"
+    ],
+    "correct": 0,
+    "id": "ADF-I-026"
+  },
+  {
+    "q": "In ADLS Gen2, hierarchical namespace mainly enables:",
+    "opts": [
+      "Directory and file-level operations with ACLs and atomic renames",
+      "SQL stored procedures",
+      "VM snapshots",
+      "Key Vault secret versioning"
+    ],
+    "correct": 0,
+    "id": "ADF-I-027"
+  },
+  {
+    "q": "Which is a best practice for ADLS cost optimization?",
+    "opts": [
+      "Use lifecycle management to move data to cool/archive tiers when appropriate",
+      "Keep all data in hot tier forever",
+      "Store duplicate copies in many folders",
+      "Disable compression"
+    ],
+    "correct": 0,
+    "id": "ADF-I-028"
+  },
+  {
+    "q": "A common strategy to optimize data retrieval in ADLS for analytics is:",
+    "opts": [
+      "Partition data by common filter columns (e.g., date) and use columnar formats",
+      "Store everything in one huge CSV",
+      "Avoid folder structures",
+      "Use only images"
+    ],
+    "correct": 0,
+    "id": "ADF-I-029"
+  },
+  {
+    "q": "To trigger ADF pipeline based on ADLS file arrival, you typically configure:",
+    "opts": [
+      "Storage events + Event trigger",
+      "Tumbling Window trigger",
+      "Manual trigger only",
+      "SSIS package schedule"
+    ],
+    "correct": 0,
+    "id": "ADF-I-030"
+  },
+  {
+    "q": "When copying many tables from source to sink, a metadata-driven pipeline usually stores table list in:",
+    "opts": [
+      "A control/metadata table (e.g., Azure SQL) or file (JSON)",
+      "A PowerPoint file",
+      "A VM registry",
+      "A DNS zone"
+    ],
+    "correct": 0,
+    "id": "ADF-I-031"
+  },
+  {
+    "q": "Which activity combination is most common for copying all tables listed in a metadata table?",
+    "opts": [
+      "Lookup to get list + ForEach + Copy Activity",
+      "Wait + Switch + Fail",
+      "Web only",
+      "Get Metadata on SQL tables"
+    ],
+    "correct": 0,
+    "id": "ADF-I-032"
+  },
+  {
+    "q": "To capture the source file name in the sink during Copy Activity, you can use:",
+    "opts": [
+      "ADF system variables (e.g., file name) mapped to sink columns where supported",
+      "Only Azure DevOps variables",
+      "Only Key Vault secrets",
+      "Only DTU settings"
+    ],
+    "correct": 0,
+    "id": "ADF-I-033"
+  },
+  {
+    "q": "For incremental loads from SQL to ADLS, a common approach is to:",
+    "opts": [
+      "Filter source query by watermark/last_modified and update watermark after success",
+      "Always truncate and reload",
+      "Use Event trigger only",
+      "Disable indexes"
+    ],
+    "correct": 0,
+    "id": "ADF-I-034"
+  },
+  {
+    "q": "Which statement best describes ADF vs Databricks?",
+    "opts": [
+      "ADF orchestrates and moves data; Databricks provides scalable compute for transformations/ML",
+      "ADF is only for ML",
+      "Databricks is only for scheduling",
+      "They are identical services"
+    ],
+    "correct": 0,
+    "id": "ADF-I-035"
+  },
+  {
+    "q": "When would you choose Databricks over ADF Mapping Data Flow?",
+    "opts": [
+      "For complex transformations, custom code, or large-scale Spark processing",
+      "For simple file copy only",
+      "For configuring RBAC",
+      "For creating storage accounts"
+    ],
+    "correct": 0,
+    "id": "ADF-I-036"
+  },
+  {
+    "q": "A typical best practice for pipeline design is to:",
+    "opts": [
+      "Use reusable parameterized pipelines and datasets",
+      "Hardcode paths in every activity",
+      "Avoid parameters",
+      "Put all logic into one activity"
+    ],
+    "correct": 0,
+    "id": "ADF-I-037"
+  },
+  {
+    "q": "Which feature helps control parallelism in ADF ForEach?",
+    "opts": [
+      "Batch count (concurrency) setting",
+      "Dataset name length",
+      "Trigger description",
+      "ARM template size"
+    ],
+    "correct": 0,
+    "id": "ADF-I-038"
+  },
+  {
+    "q": "If a pipeline is running slow, the first step should be to:",
+    "opts": [
+      "Identify the slow activity via Monitor and check IR/throughput/source bottlenecks",
+      "Immediately delete the pipeline",
+      "Increase DTUs without checking",
+      "Disable logging"
+    ],
+    "correct": 0,
+    "id": "ADF-I-039"
+  },
+  {
+    "q": "Which is a typical optimization for Azure SQL query performance?",
+    "opts": [
+      "Create appropriate indexes and avoid SELECT * in heavy queries",
+      "Disable indexes always",
+      "Store data only as NVARCHAR(MAX)",
+      "Avoid statistics"
+    ],
+    "correct": 0,
+    "id": "ADF-I-040"
+  },
+  {
+    "q": "Which Azure SQL scaling model uses virtual cores?",
+    "opts": [
+      "vCore model",
+      "DTU model",
+      "Blob tier model",
+      "Event Grid model"
+    ],
+    "correct": 0,
+    "id": "ADF-I-041"
+  },
+  {
+    "q": "Which Azure SQL scaling model uses bundled compute/storage metrics called DTUs?",
+    "opts": [
+      "DTU model",
+      "vCore model",
+      "Spark model",
+      "Serverless IR model"
+    ],
+    "correct": 0,
+    "id": "ADF-I-042"
+  },
+  {
+    "q": "To secure ADF pipelines accessing private resources, you might use:",
+    "opts": [
+      "Managed VNet + private endpoints/managed private endpoints",
+      "Public anonymous endpoints",
+      "Hardcoded keys",
+      "Open firewalls to the internet"
+    ],
+    "correct": 0,
+    "id": "ADF-I-043"
+  },
+  {
+    "q": "A good practice for governance in a data lake environment is to:",
+    "opts": [
+      "Implement cataloging/lineage (e.g., Purview) and standardized naming/zone conventions",
+      "Store everything without metadata",
+      "Avoid access controls",
+      "Disable auditing"
+    ],
+    "correct": 0,
+    "id": "ADF-I-044"
+  },
+  {
+    "q": "To manage data lifecycle policies in ADLS, you typically use:",
+    "opts": [
+      "Lifecycle management rules based on age/access tier",
+      "ADF triggers only",
+      "SQL DTUs",
+      "RBAC role renames"
+    ],
+    "correct": 0,
+    "id": "ADF-I-045"
+  },
+  {
+    "q": "Which is a common way to validate data quality after ingestion?",
+    "opts": [
+      "Row counts, checksums, schema checks, and reconciliation reports",
+      "Rename folders randomly",
+      "Disable logging",
+      "Store data in one file"
+    ],
+    "correct": 0,
+    "id": "ADF-I-046"
+  },
+  {
+    "q": "In ADF, a common approach to handle failures with custom logic is to:",
+    "opts": [
+      "Use activity dependencies to route to failure handling branch",
+      "Rely only on portal refresh",
+      "Disable retries",
+      "Use only Debug runs"
+    ],
+    "correct": 0,
+    "id": "ADF-I-047"
+  },
+  {
+    "q": "Which ADF feature helps avoid hardcoding environment-specific values?",
+    "opts": [
+      "Parameterized linked services/datasets and Key Vault references",
+      "Long dataset names",
+      "Manual UI edits in production",
+      "Disabling Git integration"
+    ],
+    "correct": 0,
+    "id": "ADF-I-048"
+  },
+  {
+    "q": "To deploy Databricks notebooks alongside ADF, CI/CD typically includes:",
+    "opts": [
+      "Databricks CLI/REST or asset bundles + pipeline release stages",
+      "Only ARM templates for notebooks",
+      "Only manual uploads",
+      "Only storage lifecycle rules"
+    ],
+    "correct": 0,
+    "id": "ADF-I-049"
+  },
+  {
+    "q": "Which ADF option helps you re-run only failed windows automatically for time-partitioned processing?",
+    "opts": [
+      "Tumbling Window trigger with backfill/retry semantics",
+      "Schedule trigger only",
+      "Event trigger only",
+      "Debug run only"
+    ],
+    "correct": 0,
+    "id": "ADF-I-050"
+  },
+  {
+    "q": "A common difference between ADLS Gen1 and Gen2 is:",
+    "opts": [
+      "Gen2 is built on Blob Storage and supports hierarchical namespace; Gen1 is a separate legacy service",
+      "Gen1 supports hierarchical namespace; Gen2 does not",
+      "Gen2 requires SSIS IR always",
+      "Gen1 is newer than Gen2"
+    ],
+    "correct": 0,
+    "id": "ADF-I-051"
+  },
+  {
+    "q": "Binary copy method in ADF is best used when:",
+    "opts": [
+      "You want to copy files as-is without parsing (e.g., images, zip, pdf)",
+      "You need column-level transformations",
+      "You want to execute SQL queries",
+      "You need row-level security"
+    ],
+    "correct": 0,
+    "id": "ADF-I-052"
+  },
+  {
+    "q": "For monitoring and alerting on pipeline failures across many pipelines, a scalable approach is:",
+    "opts": [
+      "Send diagnostic logs to Log Analytics and create alerts/dashboards",
+      "Check each run manually daily",
+      "Disable diagnostics",
+      "Store failures in a Word doc"
+    ],
+    "correct": 0,
+    "id": "ADF-I-053"
+  },
+  {
+    "q": "A common way to implement incremental loads in ADLS ingestion is to:",
+    "opts": [
+      "Maintain processed state (watermark) and process only new/changed partitions/files",
+      "Always reprocess entire lake",
+      "Disable partitioning",
+      "Avoid metadata tables"
+    ],
+    "correct": 0,
+    "id": "ADF-I-054"
+  },
+  {
+    "q": "Which ADF activity is commonly used to execute Databricks notebooks?",
+    "opts": [
+      "Notebook activity (Databricks)",
+      "Get Metadata",
+      "Wait",
+      "Filter"
+    ],
+    "correct": 0,
+    "id": "ADF-I-055"
+  },
+  {
+    "q": "Which ADF activity can execute another pipeline as a child?",
+    "opts": [
+      "Execute Pipeline activity",
+      "Lookup activity",
+      "Web activity",
+      "Delete activity"
+    ],
+    "correct": 0,
+    "id": "ADF-I-056"
+  },
+  {
+    "q": "A master pipeline calling many child pipelines is mainly used to:",
+    "opts": [
+      "Centralize orchestration and reuse common steps",
+      "Increase storage capacity",
+      "Create new DTU models",
+      "Disable triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-I-057"
+  },
+  {
+    "q": "To avoid duplicate processing when reruns happen, a common design principle is:",
+    "opts": [
+      "Idempotency (safe re-runs) using keys/watermarks/merge semantics",
+      "Always append without keys",
+      "Disable retries",
+      "Delete data randomly"
+    ],
+    "correct": 0,
+    "id": "ADF-I-058"
+  },
+  {
+    "q": "Which is a typical best practice when using Event Triggers for file arrival?",
+    "opts": [
+      "Use patterns like prefix/suffix filtering and ensure event delivery/latency expectations are met",
+      "Rely on manual folder checks",
+      "Disable Event Grid retries",
+      "Use only monthly schedules"
+    ],
+    "correct": 0,
+    "id": "ADF-I-059"
+  },
+  {
+    "q": "To optimize partitioning in ADLS, you should avoid:",
+    "opts": [
+      "Too many tiny partitions causing small-file problem",
+      "Partitioning by date",
+      "Columnar formats",
+      "Folder-based organization"
+    ],
+    "correct": 0,
+    "id": "ADF-I-060"
+  }
+]

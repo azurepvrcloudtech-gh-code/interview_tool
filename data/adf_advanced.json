@@ -1,0 +1,607 @@
+[
+  {
+    "q": "You need to copy ~1 billion rows from on-prem SQL Server to ADLS quickly. Best approach?",
+    "opts": [
+      "Use Self-hosted IR, source partitioning, parallel copy, and land as parquet/partitioned data",
+      "Use single-threaded copy with no partitioning",
+      "Export to Excel then upload",
+      "Run only in Debug mode"
+    ],
+    "correct": 0,
+    "id": "ADF-A-001"
+  },
+  {
+    "q": "For very large SQL extracts, which technique most directly increases throughput in ADF Copy Activity?",
+    "opts": [
+      "Parallelism via partition options (range/hash) on a suitable column",
+      "Increasing dataset description length",
+      "Adding more triggers",
+      "Turning off activity retries"
+    ],
+    "correct": 0,
+    "id": "ADF-A-002"
+  },
+  {
+    "q": "When using Tumbling Window triggers, why is backfill valuable?",
+    "opts": [
+      "It can process missed windows deterministically and in order",
+      "It converts JSON to parquet automatically",
+      "It disables duplicates automatically",
+      "It replaces Key Vault"
+    ],
+    "correct": 0,
+    "id": "ADF-A-003"
+  },
+  {
+    "q": "A pipeline must run exactly once per hour window and prevent overlapping runs. Best trigger?",
+    "opts": [
+      "Tumbling Window trigger",
+      "Schedule trigger",
+      "Event trigger",
+      "Manual runs"
+    ],
+    "correct": 0,
+    "id": "ADF-A-004"
+  },
+  {
+    "q": "A pipeline failed midway during a multi-file ingestion. Best recovery design is to:",
+    "opts": [
+      "Checkpoint processed files/partitions and make the pipeline idempotent for safe re-run",
+      "Always delete the entire lake and restart",
+      "Disable monitoring to avoid alerts",
+      "Increase DTUs only"
+    ],
+    "correct": 0,
+    "id": "ADF-A-005"
+  },
+  {
+    "q": "Which design best supports metadata-driven ingestion of hundreds of tables without duplicating pipelines?",
+    "opts": [
+      "Control table + generic pipeline with Lookup + ForEach + dynamic datasets/queries",
+      "One pipeline per table hardcoded",
+      "Manual copy-paste each activity",
+      "Only schedule triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-A-006"
+  },
+  {
+    "q": "In a metadata-driven pipeline, dynamic content is most commonly used to:",
+    "opts": [
+      "Build table names, file paths, and queries at runtime",
+      "Change Azure region of the subscription",
+      "Rotate Key Vault tenant",
+      "Resize ADLS accounts"
+    ],
+    "correct": 0,
+    "id": "ADF-A-007"
+  },
+  {
+    "q": "Late-arriving data in a partitioned lake is best handled by:",
+    "opts": [
+      "Allowing reprocessing/backfill for affected partitions/windows with idempotent merge logic",
+      "Ignoring late data always",
+      "Storing late data only in hot tier",
+      "Disabling partitions"
+    ],
+    "correct": 0,
+    "id": "ADF-A-008"
+  },
+  {
+    "q": "For SCD Type 2 in a dimensional model, the key concept is to:",
+    "opts": [
+      "Expire old records and insert new versions with effective dates and current flag",
+      "Overwrite rows in-place without history",
+      "Store only aggregates",
+      "Disable surrogate keys"
+    ],
+    "correct": 0,
+    "id": "ADF-A-009"
+  },
+  {
+    "q": "Which pattern is best to avoid duplicates when processing event-triggered files that may be delivered more than once?",
+    "opts": [
+      "Maintain a processed-file registry (metadata table) and skip already processed items",
+      "Assume events are exactly-once",
+      "Disable Event Grid retries",
+      "Always overwrite entire lake"
+    ],
+    "correct": 0,
+    "id": "ADF-A-010"
+  },
+  {
+    "q": "When should you consider using Managed Virtual Network (managed VNet) for ADF?",
+    "opts": [
+      "When you need private connectivity to data stores without public endpoints",
+      "When you want to run SSIS packages locally",
+      "When you want faster portal UI",
+      "When you need DTU scaling"
+    ],
+    "correct": 0,
+    "id": "ADF-A-011"
+  },
+  {
+    "q": "Which feature enables ADF to connect privately to Azure services from a managed VNet?",
+    "opts": [
+      "Managed private endpoints",
+      "SAS token rotation",
+      "Auto-resolve IR",
+      "Schedule triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-A-012"
+  },
+  {
+    "q": "If ADF needs to access an on-prem source and you must also support high availability, you should:",
+    "opts": [
+      "Install multiple Self-hosted IR nodes in a cluster and monitor/patch them",
+      "Use only one SHIR node without backups",
+      "Use Azure-SSIS IR",
+      "Disable retries"
+    ],
+    "correct": 0,
+    "id": "ADF-A-013"
+  },
+  {
+    "q": "A common root cause of slow Copy Activity from SQL sources is:",
+    "opts": [
+      "Source query bottlenecks/locks or insufficient indexing on extraction predicates",
+      "Too many linked services",
+      "Too many triggers",
+      "Too many datasets"
+    ],
+    "correct": 0,
+    "id": "ADF-A-014"
+  },
+  {
+    "q": "Which approach improves Azure SQL extraction performance for incremental loads?",
+    "opts": [
+      "Use indexed watermark column (e.g., ModifiedDate/rowversion) and query only changed rows",
+      "Always SELECT * without filters",
+      "Disable statistics",
+      "Use NVARCHAR(MAX) for every column"
+    ],
+    "correct": 0,
+    "id": "ADF-A-015"
+  },
+  {
+    "q": "For large files in ADLS, which layout best supports parallel processing and query pruning?",
+    "opts": [
+      "Partitioned folders by date/domain and columnar formats like Parquet",
+      "Single monolithic CSV per year in one folder",
+      "Millions of tiny files per minute",
+      "Uncompressed XML only"
+    ],
+    "correct": 0,
+    "id": "ADF-A-016"
+  },
+  {
+    "q": "The 'small files problem' in data lakes primarily impacts:",
+    "opts": [
+      "Performance and metadata overhead in processing engines",
+      "Encryption at rest",
+      "RBAC role definitions",
+      "Event Grid reliability"
+    ],
+    "correct": 0,
+    "id": "ADF-A-017"
+  },
+  {
+    "q": "Which technique is best to reduce small-file issues during ingestion?",
+    "opts": [
+      "Batch/compact files (coalesce) during processing and write fewer larger files",
+      "Create more folders",
+      "Write one file per row",
+      "Disable partitioning entirely"
+    ],
+    "correct": 0,
+    "id": "ADF-A-018"
+  },
+  {
+    "q": "For disaster recovery of ADLS, a strong strategy is to:",
+    "opts": [
+      "Use replication (e.g., GRS/GZRS where applicable) plus restore testing and versioning/soft delete",
+      "Only rename containers",
+      "Store backups on local laptop",
+      "Disable access controls"
+    ],
+    "correct": 0,
+    "id": "ADF-A-019"
+  },
+  {
+    "q": "High availability for Azure SQL databases is best achieved using:",
+    "opts": [
+      "Built-in HA + (optionally) active geo-replication/failover groups for DR",
+      "Only DTU increases",
+      "Only adding indexes",
+      "Only storing backups in ADLS"
+    ],
+    "correct": 0,
+    "id": "ADF-A-020"
+  },
+  {
+    "q": "To implement end-to-end CI/CD for ADF across environments, the most common approach is:",
+    "opts": [
+      "Git integration + publish artifacts/ARM templates + environment-specific parameters and Key Vault",
+      "Manual edits in production portal",
+      "Only schedule triggers",
+      "Only Databricks jobs"
+    ],
+    "correct": 0,
+    "id": "ADF-A-021"
+  },
+  {
+    "q": "A recommended way to handle environment-specific values in ADF templates is:",
+    "opts": [
+      "Use parameterization and variable groups/Key Vault references per environment",
+      "Hardcode prod values in Git",
+      "Duplicate factories manually",
+      "Store secrets in dataset names"
+    ],
+    "correct": 0,
+    "id": "ADF-A-022"
+  },
+  {
+    "q": "For enterprise monitoring, the best way to capture ADF run logs centrally is:",
+    "opts": [
+      "Enable diagnostic settings to Log Analytics and build alerts/workbooks",
+      "Take screenshots of Monitor page",
+      "Rely on Debug output only",
+      "Disable diagnostics"
+    ],
+    "correct": 0,
+    "id": "ADF-A-023"
+  },
+  {
+    "q": "Which ADF feature helps you branch workflow based on complex conditions?",
+    "opts": [
+      "If Condition + expressions (and Switch for discrete values)",
+      "Get Metadata only",
+      "Copy only",
+      "Publish only"
+    ],
+    "correct": 0,
+    "id": "ADF-A-024"
+  },
+  {
+    "q": "For robust error handling, a common pattern is:",
+    "opts": [
+      "Try main path; on failure dependency route to logging/notification and optionally compensation steps",
+      "Always ignore errors and continue",
+      "Disable retries and timeouts",
+      "Use only one activity"
+    ],
+    "correct": 0,
+    "id": "ADF-A-025"
+  },
+  {
+    "q": "What is the best practice for secrets used by both ADF and Databricks?",
+    "opts": [
+      "Store in Key Vault and reference from both using managed identity/service principal",
+      "Store in notebook code",
+      "Email secrets to team",
+      "Store in ADLS as text"
+    ],
+    "correct": 0,
+    "id": "ADF-A-026"
+  },
+  {
+    "q": "For secure ADF-to-ADLS access at scale, which is preferred?",
+    "opts": [
+      "Managed identity with RBAC + ACLs (least privilege)",
+      "Account access keys shared across teams",
+      "Long-lived SAS tokens embedded in code",
+      "Anonymous public containers"
+    ],
+    "correct": 0,
+    "id": "ADF-A-027"
+  },
+  {
+    "q": "If you need to process events for file creation but only after files are fully written, a safer approach is:",
+    "opts": [
+      "Land to a temp path then rename/move when complete; trigger on final path/prefix",
+      "Trigger immediately on any partial file",
+      "Disable events and poll every second",
+      "Write directly to final path without checks"
+    ],
+    "correct": 0,
+    "id": "ADF-A-028"
+  },
+  {
+    "q": "Which approach is best for exactly-once semantics in file-based ingestion?",
+    "opts": [
+      "Idempotent processing + processed-state tracking + atomic writes/moves",
+      "Assume the storage event is exactly-once",
+      "Disable retries and hope",
+      "Only use manual triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-A-029"
+  },
+  {
+    "q": "When would you choose ADF Mapping Data Flow over Databricks for transformations?",
+    "opts": [
+      "When you want low-code transformations and ADF-managed Spark without custom code complexity",
+      "When you need complex ML libraries",
+      "When you need custom JVM tuning",
+      "When you want to manage clusters manually"
+    ],
+    "correct": 0,
+    "id": "ADF-A-030"
+  },
+  {
+    "q": "A key tradeoff of Mapping Data Flows is:",
+    "opts": [
+      "They start a Spark cluster which can add startup time/cost compared to simple Copy",
+      "They cannot read from ADLS",
+      "They cannot write parquet",
+      "They require SSIS"
+    ],
+    "correct": 0,
+    "id": "ADF-A-031"
+  },
+  {
+    "q": "To optimize Copy Activity from SQL to ADLS for throughput, which sink setting is often important?",
+    "opts": [
+      "Write in larger files/partitions and use compression/columnar formats when possible",
+      "Write one file per record",
+      "Disable compression always",
+      "Avoid partition folders"
+    ],
+    "correct": 0,
+    "id": "ADF-A-032"
+  },
+  {
+    "q": "Which method is best to track file name in the target table for auditing in copy pipelines?",
+    "opts": [
+      "Use pipeline expression/system variables and map to an audit column (or additional metadata ingestion)",
+      "Rename the database",
+      "Use DTUs",
+      "Use tumbling window only"
+    ],
+    "correct": 0,
+    "id": "ADF-A-033"
+  },
+  {
+    "q": "Which is a strong approach to implement data quality gates in an ingestion pipeline?",
+    "opts": [
+      "Validate counts/schema/business rules, quarantine bad data, and stop/promote based on thresholds",
+      "Only compress files",
+      "Only increase IR nodes",
+      "Only change trigger type"
+    ],
+    "correct": 0,
+    "id": "ADF-A-034"
+  },
+  {
+    "q": "A scalable way to handle schema evolution in a lakehouse is to:",
+    "opts": [
+      "Use schema-on-read with versioned schemas, evolve tables with controlled migrations, and enforce contracts where needed",
+      "Never allow new columns",
+      "Store everything as images",
+      "Disable metadata"
+    ],
+    "correct": 0,
+    "id": "ADF-A-035"
+  },
+  {
+    "q": "In Azure SQL, Always Encrypted is primarily used to:",
+    "opts": [
+      "Protect sensitive columns so even DB admins can’t see plaintext without keys",
+      "Increase DTUs",
+      "Partition tables",
+      "Mask data only in UI"
+    ],
+    "correct": 0,
+    "id": "ADF-A-036"
+  },
+  {
+    "q": "When copying from on-prem to Azure, minimizing network bottlenecks can be achieved by:",
+    "opts": [
+      "Using ExpressRoute/VPN, placing SHIR near source, and tuning parallelism",
+      "Using slower internet links intentionally",
+      "Disabling compression always",
+      "Running only one thread"
+    ],
+    "correct": 0,
+    "id": "ADF-A-037"
+  },
+  {
+    "q": "Which ADF setting helps prevent overwhelming downstream systems when running many parallel activities?",
+    "opts": [
+      "Concurrency limits (ForEach batch count) and trigger concurrency settings",
+      "Longer pipeline names",
+      "More linked services",
+      "More datasets"
+    ],
+    "correct": 0,
+    "id": "ADF-A-038"
+  },
+  {
+    "q": "A common best practice for master pipelines orchestrating many child pipelines is to:",
+    "opts": [
+      "Use dependency ordering, parallel groups, and centralized logging with correlation IDs",
+      "Call all pipelines blindly with no limits",
+      "Disable monitoring",
+      "Use only manual triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-A-039"
+  },
+  {
+    "q": "For reprocessing a specific date range of partitions, the most controlled approach is:",
+    "opts": [
+      "Parameterize the date range and rerun for those partitions/windows (or backfill tumbling windows)",
+      "Delete the entire lake",
+      "Change RBAC roles",
+      "Scale Azure SQL to max"
+    ],
+    "correct": 0,
+    "id": "ADF-A-040"
+  },
+  {
+    "q": "When designing scalable ADF pipelines, which is most important?",
+    "opts": [
+      "Modularity, parameterization, metadata-driven patterns, and observability",
+      "Hardcoding every path and table",
+      "Avoiding monitoring",
+      "Using one huge activity"
+    ],
+    "correct": 0,
+    "id": "ADF-A-041"
+  },
+  {
+    "q": "A well-designed incremental pipeline updates the watermark:",
+    "opts": [
+      "Only after successful completion of the load (and ideally in a transaction/atomic way)",
+      "Before the load starts",
+      "Randomly",
+      "Only when failures happen"
+    ],
+    "correct": 0,
+    "id": "ADF-A-042"
+  },
+  {
+    "q": "To prevent partial loads from being consumed downstream, a common technique is:",
+    "opts": [
+      "Write to a staging area then promote (rename/move/commit) on success",
+      "Write directly to gold zone immediately",
+      "Disable dependencies",
+      "Only use event triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-A-043"
+  },
+  {
+    "q": "Which approach best supports auditability and lineage across ADF runs?",
+    "opts": [
+      "Persist run metadata (runId, window, source/sink, counts) to a log table and enable diagnostic logs",
+      "Only store files in one folder",
+      "Disable run IDs",
+      "Use only screenshots"
+    ],
+    "correct": 0,
+    "id": "ADF-A-044"
+  },
+  {
+    "q": "If ADF needs to access Azure SQL via private endpoint, you must ensure:",
+    "opts": [
+      "ADF managed VNet (or your VNet IR) and private DNS resolution are configured properly",
+      "Only increase DTUs",
+      "Only change dataset name",
+      "Only use access keys"
+    ],
+    "correct": 0,
+    "id": "ADF-A-045"
+  },
+  {
+    "q": "For high-volume ingestion, which file format generally yields better downstream performance in Spark/SQL engines?",
+    "opts": [
+      "Parquet",
+      "TXT",
+      "BMP",
+      "DOCX"
+    ],
+    "correct": 0,
+    "id": "ADF-A-046"
+  },
+  {
+    "q": "A robust way to handle delete/changes from source in incremental loads is to:",
+    "opts": [
+      "Use CDC/Change Tracking or MERGE strategies in curated layers",
+      "Only append forever and ignore deletes",
+      "Disable keys",
+      "Use only full reloads"
+    ],
+    "correct": 0,
+    "id": "ADF-A-047"
+  },
+  {
+    "q": "Which option is best to run ADF + Databricks deployments with approvals and multi-stage releases?",
+    "opts": [
+      "Azure DevOps multi-stage pipelines with environments and approvals",
+      "Only local scripts",
+      "Only portal changes",
+      "Only schedule triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-A-048"
+  },
+  {
+    "q": "In event-driven ingestion, what’s a common risk and mitigation?",
+    "opts": [
+      "Risk: duplicate/out-of-order events; Mitigation: idempotent processing + state tracking",
+      "Risk: too many indexes; Mitigation: remove all indexes",
+      "Risk: encryption at rest; Mitigation: disable encryption",
+      "Risk: RBAC; Mitigation: give Owner to everyone"
+    ],
+    "correct": 0,
+    "id": "ADF-A-049"
+  },
+  {
+    "q": "Which is a common reason to choose Azure SQL Managed Instance over Azure SQL Database?",
+    "opts": [
+      "Near 100% SQL Server compatibility and instance-level features for lift-and-shift",
+      "Cheaper storage tiers only",
+      "Built-in Spark clusters",
+      "Event Grid triggers"
+    ],
+    "correct": 0,
+    "id": "ADF-A-050"
+  },
+  {
+    "q": "If you need to migrate SSIS workloads to Azure with minimal changes, which ADF capability is relevant?",
+    "opts": [
+      "Azure-SSIS Integration Runtime",
+      "Auto-resolve IR",
+      "Event trigger",
+      "Lookup activity"
+    ],
+    "correct": 0,
+    "id": "ADF-A-051"
+  },
+  {
+    "q": "To improve reliability of long-running pipelines, which practice helps most?",
+    "opts": [
+      "Break work into smaller steps, checkpoint state, and implement retries/timeouts thoughtfully",
+      "Make one single activity that runs for days",
+      "Disable retries",
+      "Avoid monitoring"
+    ],
+    "correct": 0,
+    "id": "ADF-A-052"
+  },
+  {
+    "q": "For governance in a lake, which combination is strongest?",
+    "opts": [
+      "Least-privilege access (RBAC/ACL), encryption, auditing, and catalog/lineage",
+      "Public containers + shared keys",
+      "No ACLs",
+      "No monitoring"
+    ],
+    "correct": 0,
+    "id": "ADF-A-053"
+  },
+  {
+    "q": "When implementing parallel copies using partitioning, you should verify:",
+    "opts": [
+      "Source supports partitioning predicate and the chosen column is well-distributed",
+      "Partition column is always NULL",
+      "Only triggers matter",
+      "Only dataset name matters"
+    ],
+    "correct": 0,
+    "id": "ADF-A-054"
+  },
+  {
+    "q": "If ADF pipeline needs to call 30 child pipelines efficiently, best approach is:",
+    "opts": [
+      "Execute Pipeline in parallel groups with controlled concurrency and failure handling",
+      "Copy-paste 30 pipelines into one activity",
+      "Run them manually one by one",
+      "Disable dependencies"
+    ],
+    "correct": 0,
+    "id": "ADF-A-055"
+  }
+]
