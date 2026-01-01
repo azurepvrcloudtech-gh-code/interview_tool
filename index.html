@@ -212,9 +212,16 @@ body::before{
   </div>
 
 <script>
+  
   // ====== SET THESE ======
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-X5AVje_HVNwzhdnhGskyLKUt-ciagLdK0DNGJLhp0Ei5C-eMUf86Q31wDfa2zh4R/exec";
   const SECRET_KEY = "PVR_MCQ_interview_2026"; // must match Apps Script
+
+  const SESSION_TOKEN = localStorage.getItem("pvr_sessionToken");
+if (!SESSION_TOKEN) {
+  window.location.href = "login.html";
+}
+
 
   const PASS_PERCENT = 80;
   const FINAL_SAVE_MESSAGE = "Answers saved. If needed please contact to PVRCLOUDTECH.";
@@ -451,6 +458,17 @@ body::before{
   const btnGoBack = document.getElementById('btnGoBack');
   const btnSubmitAnyway = document.getElementById('btnSubmitAnyway');
 
+    // Auto-fill from verified login
+  elName.value = localStorage.getItem("pvr_candidateName") || "";
+  elEmail.value = localStorage.getItem("pvr_candidateEmail") || "";
+  elPhone.value = localStorage.getItem("pvr_candidatePhone") || "";
+  
+  // Make them read-only after verification
+  elName.readOnly = true;
+  elEmail.readOnly = true;
+  elPhone.readOnly = true;
+
+
   function showToast(msg){
     toast.textContent = msg;
     toast.classList.add('show');
@@ -565,20 +583,6 @@ body::before{
   }
 
   async function submitToGoogle(){
-    const candidate = (elName.value || '').trim();
-    if (!candidate) {
-      showToast("Please enter candidate name.");
-      return { ok:false, error:"Missing candidate name" };
-    }
-
-    const email = (elEmail.value || '').trim();
-    const phone = (elPhone.value || '').trim();
-    
-    if (!email) { showToast("Please enter email address."); return { ok:false, error:"Missing email" }; }
-    if (!isValidEmail(email)) { showToast("Please enter a valid email address."); return { ok:false, error:"Invalid email" }; }
-    
-    if (!phone) { showToast("Please enter mobile number."); return { ok:false, error:"Missing phone" }; }
-    if (!isValidPhone(phone)) { showToast("Please enter a valid mobile number."); return { ok:false, error:"Invalid phone" }; }
 
     const difficulty = (elDiff.value || "BASIC").toUpperCase();
     const { correct, total, percent } = computeScore();
@@ -597,16 +601,15 @@ body::before{
     });
 
     const payload = {
-      secret: SECRET_KEY,
-      candidate,
-      email,
-      phone,
-      difficulty,
-      total,
-      correct,
-      percent,
-      questions: questionsPayload
-    };
+  secret: SECRET_KEY,
+  action: "submitTest",
+  sessionToken: SESSION_TOKEN,
+  difficulty,
+  total,
+  correct,
+  percent,
+  questions: questionsPayload
+};
 
     const res = await fetch(APPS_SCRIPT_URL, {
       method: "POST",
@@ -660,22 +663,6 @@ body::before{
 
   // ====== Events ======
   btnStart.addEventListener('click', () => {
-    const candidate = (elName.value || '').trim();
-    if (!candidate) {
-      showToast("Please enter candidate name.");
-      return;
-    }
-
-    const email = (elEmail.value || '').trim();
-    const phone = (elPhone.value || '').trim();
-    
-    if (!email) { showToast("Please enter email address."); return; }
-    if (!isValidEmail(email)) { showToast("Please enter a valid email address."); return; }
-    
-    if (!phone) { showToast("Please enter mobile number."); return; }
-    if (!isValidPhone(phone)) { showToast("Please enter a valid mobile number."); return; }
-
-
     const diff = (elDiff.value || "BASIC").toUpperCase();
     const bank = BANK[diff];
     if (!bank || bank.length < 25) {
