@@ -1,112 +1,150 @@
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PVRCloudTech - ADF MCQ Test</title>
+  <title>ADF MCQ Test</title>
   <style>
-    :root { --bg:#0b1020; --card:#121a33; --text:#e8ecff; --muted:#aab3d6; --accent:#7aa2ff; --danger:#ff6b6b; --ok:#4ade80; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, #18214a 0%, var(--bg) 55%), var(--bg);
-      color: var(--text);
-    }
-    .wrap { max-width: 980px; margin: 28px auto; padding: 0 16px; position:relative; }
-    .header { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom: 14px; }
-    h1 { margin:0; font-size: 22px; letter-spacing: .2px; }
-    .sub { margin:6px 0 0; color: var(--muted); font-size: 13px; }
-    .card { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.10); border-radius: 18px; padding: 16px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.35);
-    }
-    .row { display:grid; grid-template-columns: 1fr; gap:12px; }
-    @media (min-width: 860px){ .row { grid-template-columns: 1fr 1fr; } }
+    /* Watermark background */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  background: url("./assets/watermark.png") center/420px no-repeat;
+  opacity: 0.06;          /* adjust: 0.04 to 0.10 */
+  pointer-events: none;
+  z-index: 0;
+}
 
+/* Keep your actual content above watermark */
+.wrap { position: relative; z-index: 1; }
+
+    :root { --bg:#0b1020; --card:#121a33; --text:#e8ecff; --muted:#aab3d6; --accent:#7aa2ff; --danger:#ff6b6b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, #18214a 0%, var(--bg) 55%), var(--bg); color: var(--text); }
+    .wrap {
+  max-width: 960px;
+  margin: 64px auto 80px auto;   /* more top margin */
+  padding: 0 20px;
+}
+    .header { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom: 14px; }
+    h1 { margin:0; font-size: 22px; }
+    .sub { margin:6px 0 0; color: var(--muted); font-size: 13px; }
+    .pill { font-size: 12px; color: var(--muted); border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18); padding: 6px 10px; border-radius: 999px; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.10); border-radius: 18px; padding: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.35); }
     label { display:block; font-size: 12px; color: var(--muted); margin: 0 0 6px; }
-    input[type="text"], select {
+    input, select {
       width:100%; border-radius: 12px; border: 1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.20); color: var(--text); padding: 10px 12px; outline:none;
     }
     input:focus, select:focus { border-color: rgba(122,162,255,.65); box-shadow: 0 0 0 3px rgba(122,162,255,.15); }
-
-    .pill { font-size: 12px; color: var(--muted); border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18); padding: 6px 10px; border-radius: 999px;
-      white-space:nowrap;
-    }
+    .row { display:grid; grid-template-columns: 1fr; gap:12px; }
+    @media (min-width: 860px){ .row { grid-template-columns: 1fr 1fr; } }
     .divider { height:1px; background: rgba(255,255,255,.10); margin: 14px 0; }
-
     .qbox { padding: 14px; border-radius: 16px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); }
-    .qtitle { display:flex; gap:10px; align-items:center; justify-content:space-between; }
+    .qtitle { display:flex; justify-content:space-between; align-items:center; gap:10px; }
     .qtitle h2 { margin:0; font-size: 16px; }
-    .qtitle .meta { color: var(--muted); font-size: 12px; }
-    .qtext { margin: 10px 0 0; color: var(--text); font-size: 14px; line-height: 1.45; white-space: pre-wrap; }
-
-    .options { margin-top: 12px; display:grid; gap:10px; }
+    .meta { color: var(--muted); font-size: 12px; }
+    .qtext { margin: 10px 0 0; font-size: 14px; line-height:1.45; white-space:pre-wrap; }
+    .options { margin-top: 10px; display:grid; gap:10px; }
     .opt {
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      padding: 10px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
       border-radius: 12px;
-      cursor:pointer;
+      padding: 10px 12px;
+      cursor: pointer;
       display:flex;
       gap:10px;
       align-items:flex-start;
-      user-select:none;
     }
-    .opt:hover { background: rgba(255,255,255,.10); }
-    .opt input { margin-top: 2px; }
-    .opt.selected { border-color: rgba(122,162,255,.60); background: rgba(122,162,255,.14); }
+    .opt input { width:auto; margin-top: 2px; }
+    .opt:hover { background: rgba(255,255,255,.06); }
+    .brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
 
-    .toolbar { display:flex; flex-wrap: wrap; gap:10px; align-items:center; justify-content:space-between; margin: 12px 0 0; }
-    .left, .right { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.logo {
+  height: 46px;
+  width: auto;
+  padding: 6px;
+  border-radius: 10px;
+
+  /* contrast boost */
+  background: rgba(255,255,255,0.08);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.12),
+    0 8px 20px rgba(0,0,0,0.4);
+}
+
+.brandText h1 {
+  margin: 0;
+}
+
+.brandText .sub {
+  margin-top: 4px;
+}
+@media (max-width:520px){
+  .logo{ height:38px; }
+}
+    .toolbar { display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center; margin-top: 12px; }
     .btn { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.07); color: var(--text);
       padding: 10px 12px; border-radius: 12px; cursor:pointer; font-weight:600; }
     .btn:hover { background: rgba(255,255,255,.12); }
     .btn.primary { background: rgba(122,162,255,.22); border-color: rgba(122,162,255,.5); }
     .btn.primary:hover { background: rgba(122,162,255,.30); }
-    .btn.danger { background: rgba(255,107,107,.18); border-color: rgba(255,107,107,.45); }
 
-    .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
-
-    /* Toast */
+    .resultBox { margin-top:12px; padding:12px; border-radius: 14px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); }
     .toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
       background: rgba(18,26,51,.95); border: 1px solid rgba(255,255,255,.14);
       padding: 10px 12px; border-radius: 12px; box-shadow: 0 10px 22px rgba(0,0,0,.35);
-      color: var(--text); font-size: 13px; opacity: 0; pointer-events:none; transition: opacity .18s ease; z-index: 50; }
+      font-size: 13px; opacity: 0; pointer-events:none; transition: opacity .18s ease; }
     .toast.show { opacity: 1; }
 
-    /* Result box */
-    .result { margin-top: 14px; padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); display:none; }
-    .result strong { font-size: 14px; }
-    .ok { color: var(--ok); }
-    .bad { color: var(--danger); }
+    /* Confirm modal */
+    .modalBackdrop { position: fixed; inset:0; background: rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:16px; }
+    .modal { width: min(520px, 100%); background: rgba(18,26,51,.98); border:1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.45); }
+    .modal h3 { margin:0 0 8px; font-size: 16px; }
+    .modal p { margin:0; color: var(--muted); line-height: 1.45; }
+    .modalBtns { display:flex; gap:10px; justify-content:flex-end; margin-top: 12px; flex-wrap: wrap; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="header">
-      <div>
-        <h1>ADF MCQ Practice Test</h1>
-        <p class="sub">Random 25 questions per attempt (questions + options shuffled).</p>
-      </div>
-      <div class="pill" id="statusPill">Not started</div>
+  <div class="brand">
+    <img src="./assets/logo.png" class="logo" alt="PVR Cloud Tech">
+    <div class="brandText">
+      <h1>Interview Questions Practice Tool</h1>
+      <p class="sub">Shuffle questions, collect answers, and download a single text file per candidate.</p>
     </div>
+  </div>
+  <div class="pill" id="statusPill">Not started</div>
+</div>
 
     <div class="card">
       <div class="row">
         <div>
           <label for="candidateName">Candidate name</label>
-          <input id="candidateName" type="text" placeholder="e.g., Rahul Sharma" />
-          <div class="hint">Name is stored in Google Sheet/Drive (if submit is enabled).</div>
+          <input id="candidateName" type="text" placeholder="e.g., Srinivas" />
         </div>
         <div>
           <label for="difficulty">Difficulty</label>
           <select id="difficulty">
-            <option value="basic" selected>Basic</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
+            <option value="BASIC">Basic</option>
+            <option value="INTERMEDIATE">Intermediate</option>
+            <option value="ADVANCED">Advanced</option>
           </select>
-          <div class="hint">Picks 25 random questions from the selected JSON bank.</div>
         </div>
       </div>
 
@@ -115,357 +153,419 @@
       <div class="qbox">
         <div class="qtitle">
           <h2>Question</h2>
-          <div class="meta" id="qMeta">0 / 25</div>
+          <div class="meta" id="qMeta">0 / 0</div>
         </div>
         <div class="qtext" id="qText">Click <b>Start</b> to begin.</div>
-
         <div class="options" id="options"></div>
 
         <div class="toolbar">
-          <div class="left">
-            <button class="btn" id="btnStart">Start</button>
-            <button class="btn" id="btnPrev" disabled>Previous</button>
-            <button class="btn primary" id="btnNext" disabled>Save & Next</button>
-          </div>
-          <div class="right">
-            <button class="btn primary" id="btnComplete" disabled>Complete</button>
-          </div>
+          <button class="btn" id="btnStart">Start</button>
+          <button class="btn" id="btnPrev" disabled>Previous</button>
+          <button class="btn primary" id="btnNext" disabled>Save & Next</button>
+          <button class="btn primary" id="btnComplete" disabled>Complete</button>
         </div>
 
-        <div class="hint">Save & Next will store your selection for the current question.</div>
+        <div class="resultBox" id="resultBox" style="display:none;"></div>
       </div>
-
-      <div class="result" id="resultBox"></div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
+  <!-- Confirm modal -->
+  <div class="modalBackdrop" id="confirmBackdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h3>Confirm Submission</h3>
+      <p id="confirmText"></p>
+      <div class="modalBtns">
+        <button class="btn" id="btnGoBack">Go back</button>
+        <button class="btn primary" id="btnSubmitAnyway">Submit</button>
+      </div>
+    </div>
+  </div>
+
 <script>
-/** =========================
- * OPTIONAL GOOGLE SUBMIT
- * =========================
- * If you want to submit to Google Sheet + Drive:
- * 1) Deploy Apps Script web app
- * 2) Put the URL and SECRET here
- *
- * If you keep APPS_SCRIPT_URL empty, "Complete" will only show score locally.
- */
-const APPS_SCRIPT_URL = "";   // e.g. "https://script.google.com/macros/s/XXXX/exec"
-const SUBMIT_SECRET = "PVR_SECRET_2026";
+  // ====== SET THESE ======
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybwb64eeuRUTkSRCEMBog02YA-q5NhJPx9hnKgmlaSN_x04_OOPeKtIsrXxqz1MEY/exec";
+  const SECRET_KEY = "PVR_MCQ_interview_2026"; // must match Apps Script
 
-/** Pick fixed number of questions per attempt */
-const QUESTIONS_PER_ATTEMPT = 25;
+  const PASS_PERCENT = 80;
+  const FINAL_SAVE_MESSAGE = "Answers saved. If needed please contact to PVRCLOUDTECH.";
 
-/** JSON file map */
-const BANK_URL = {
-  basic: "./data/adf_basic.json",
-  intermediate: "./data/adf_intermediate.json",
-  advanced: "./data/adf_advanced.json",
-};
+  // =========================
+  // BANK: ADF (25 each)
+  // Each question: { q, opts:[...], correct:index }
+  // =========================
+  const BANK = {
+    BASIC: [
+      { q: "ADF is primarily used for:", opts: ["Creating VMs", "Data integration & orchestration", "Hosting websites", "Monitoring logs"], correct: 1 },
+      { q: "An ADF pipeline is a:", opts: ["Storage account", "Logical group of activities", "SQL table", "Compute cluster"], correct: 1 },
+      { q: "A Linked Service represents:", opts: ["Compute size", "Connection info to a resource", "A schedule trigger", "A dataset schema only"], correct: 1 },
+      { q: "A Dataset in ADF defines:", opts: ["Reference to data + structure", "Only pricing", "Only trigger type", "Only notebook code"], correct: 0 },
+      { q: "Integration Runtime (IR) is used to:", opts: ["Run Power BI reports", "Provide compute for data movement/transform", "Store Delta tables", "Run Kubernetes pods"], correct: 1 },
+      { q: "Copy Activity is used for:", opts: ["Data movement from source to sink", "Only SQL joins", "Only file encryption", "Only streaming ingestion"], correct: 0 },
+      { q: "A Trigger in ADF is used to:", opts: ["Start pipelines", "Create tables", "Encrypt files", "Scale clusters"], correct: 0 },
+      { q: "Which is a Control Flow activity?", opts: ["ForEach", "Derived Column", "Aggregate", "Sink"], correct: 0 },
+      { q: "ADF is a:", opts: ["PaaS data integration service", "IaaS networking service", "Desktop tool", "On-prem DB"], correct: 0 },
+      { q: "Pipeline parameters help to:", opts: ["Hardcode values", "Make pipelines reusable", "Reduce storage", "Disable triggers"], correct: 1 },
 
-/** =========================
- * STATE
- * ========================= */
-let started = false;
-let idx = -1;
-let attempt = []; // 25 questions AFTER shuffling & option shuffle
-let chosen = {};  // idx -> selected option index (0..3)
+      // +15 more (Basic)
+      { q: "A pipeline run in ADF is:", opts: ["A stored procedure", "An execution instance of a pipeline", "A dataset schema", "A linked service"], correct: 1 },
+      { q: "ADF can connect to on-prem data sources using:", opts: ["Azure CDN", "Self-hosted Integration Runtime", "Azure Monitor", "Azure Policy"], correct: 1 },
+      { q: "Which ADF component defines where data comes from/goes to?", opts: ["Dataset", "Trigger", "Managed Identity", "Git branch"], correct: 0 },
+      { q: "Which is NOT an ADF activity category?", opts: ["Data movement", "Data transformation", "Control flow", "Virtual network peering"], correct: 3 },
+      { q: "A linked service typically contains:", opts: ["SQL query text", "Connection string/credentials", "Notebook cells", "Dashboard visuals"], correct: 1 },
+      { q: "ADF supports:", opts: ["Only batch", "Only streaming", "Both batch orchestration and hybrid patterns", "Only manual loads"], correct: 2 },
+      { q: "Which is a common sink in ADF Copy Activity?", opts: ["Azure SQL Database", "Azure DevOps", "Azure Active Directory", "Azure Firewall"], correct: 0 },
+      { q: "Which is used to group ADF resources logically?", opts: ["Resource Group", "VM Scale Set", "AKS namespace", "DNS zone"], correct: 0 },
+      { q: "ADF Data Flow runs on:", opts: ["Your local laptop", "Azure Databricks only", "Azure Integration Runtime (Spark)", "Azure Functions only"], correct: 2 },
+      { q: "ADF Git integration mainly helps with:", opts: ["Version control & collaboration", "Faster copy speed", "Lower storage cost", "Adding firewall rules"], correct: 0 },
+      { q: "Which is a common ADF trigger type?", opts: ["Schedule", "Tumbling window", "Event-based", "All of these"], correct: 3 },
+      { q: "To debug pipelines, you typically use:", opts: ["Debug run", "Azure CLI only", "Power BI", "ARM templates only"], correct: 0 },
+      { q: "ADF expressions use:", opts: ["@{ } only", "@pipeline(), @activity() functions", "Python syntax", "SQL only"], correct: 1 },
+      { q: "If an activity fails, you can route flow using:", opts: ["DependsOn conditions (Succeeded/Failed/Skipped)", "Only manual restart", "Only stop trigger", "Only delete pipeline"], correct: 0 },
+      { q: "ADF monitoring is mainly available in:", opts: ["Monitor hub", "Storage Explorer", "Key Vault", "Azure Portal billing"], correct: 0 },
+    ],
 
-/** =========================
- * DOM
- * ========================= */
-const elName = document.getElementById("candidateName");
-const elDiff = document.getElementById("difficulty");
-const elPill = document.getElementById("statusPill");
-const elQMeta = document.getElementById("qMeta");
-const elQText = document.getElementById("qText");
-const elOptions = document.getElementById("options");
+    INTERMEDIATE: [
+      { q: "Tumbling Window trigger is best for:", opts: ["Ad-hoc runs only", "Fixed windows with dependency support", "Only file events", "Manual runs"], correct: 1 },
+      { q: "Schema drift in Mapping Data Flow is handled by:", opts: ["Allow schema drift", "Only hard-coded mappings", "Only stored procedures", "Only Copy Activity"], correct: 0 },
+      { q: "A common way to pass values from Lookup is:", opts: ["@activity('Lookup').output...", "@trigger().name only", "hard-code", "linked service property"], correct: 0 },
+      { q: "ForEach in ADF is used to:", opts: ["Create datasets", "Iterate over an array and run activities", "Create triggers", "Scale IR"], correct: 1 },
+      { q: "Best practice for secrets in ADF is:", opts: ["Put in pipeline code", "Use Azure Key Vault", "Store in dataset name", "Use Git commit message"], correct: 1 },
+      { q: "Which activity is used to call REST APIs?", opts: ["Web activity", "Copy only", "Wait activity", "Filter activity"], correct: 0 },
+      { q: "Upsert pattern in ADF often uses:", opts: ["Stored procedure / MERGE", "Only Copy activity", "Only Wait", "Only Until"], correct: 0 },
+      { q: "A common cause of Copy performance issues is:", opts: ["Wrong partitioning/DIUs sizing", "Too many labels", "Too many triggers", "Too many folders"], correct: 0 },
+      { q: "ADF Managed VNet is used for:", opts: ["Secure private connectivity", "Speeding up Git", "Cheaper storage", "Increasing UI performance"], correct: 0 },
+      { q: "Execute Pipeline activity is used to:", opts: ["Call child pipeline", "Create dataset", "Create linked service", "Run SQL query only"], correct: 0 },
 
-const btnStart = document.getElementById("btnStart");
-const btnPrev = document.getElementById("btnPrev");
-const btnNext = document.getElementById("btnNext");
-const btnComplete = document.getElementById("btnComplete");
+      // +15 more (Intermediate)
+      { q: "A common incremental load design uses:", opts: ["Watermark column + parameter", "Always full refresh", "Random sampling", "Only manual triggers"], correct: 0 },
+      { q: "The output of a Web activity is accessed via:", opts: ["@activity('Web1').output", "@pipeline().output", "@dataset().output", "@linkedService().output"], correct: 0 },
+      { q: "To loop over files in a folder, you often use:", opts: ["Get Metadata + ForEach", "Wait + If", "Set Variable only", "Copy activity only"], correct: 0 },
+      { q: "ADF supports parallelism in ForEach via:", opts: ["Batch count", "Trigger frequency", "Dataset format", "Key Vault"], correct: 0 },
+      { q: "If you want to fail pipeline when any child fails, use:", opts: ["Fail activity or dependency on failure", "Wait activity", "Filter activity", "Until activity only"], correct: 0 },
+      { q: "To avoid exposing secrets, prefer authentication using:", opts: ["Managed Identity (where supported)", "Plain text in JSON", "Email passwords", "Hard-coded keys"], correct: 0 },
+      { q: "Copy Activity fault tolerance helps to:", opts: ["Skip incompatible rows and continue (with logging)", "Encrypt data", "Create indexes", "Run notebooks"], correct: 0 },
+      { q: "Mapping Data Flow parameterization commonly uses:", opts: ["Data flow parameters + pipeline parameters", "Only hard-coded literals", "Only ARM variables", "Only triggers"], correct: 0 },
+      { q: "Staging in Copy Activity is often used to:", opts: ["Improve load into some sinks", "Delete source data", "Generate dashboards", "Change Git branch"], correct: 0 },
+      { q: "Which is a proper dependency condition?", opts: ["Succeeded", "Failed", "Completed", "All of these"], correct: 3 },
+      { q: "A good metadata-driven pipeline usually stores config in:", opts: ["Control table / JSON config", "UI themes", "Only variable names", "Only linked service names"], correct: 0 },
+      { q: "To write to ADLS Gen2 securely from ADF, you can use:", opts: ["Managed Identity / Service Principal", "Only SAS always", "Only anonymous access", "Only FTP"], correct: 0 },
+      { q: "The main benefit of using child pipelines is:", opts: ["Reuse and maintainability", "Higher VM RAM", "Lower DNS latency", "More UI animations"], correct: 0 },
+      { q: "A common way to capture run IDs is:", opts: ["@pipeline().RunId", "@pipeline().Name only", "@dataset().RunId", "@trigger().RunId"], correct: 0 },
+      { q: "To orchestrate Databricks from ADF you typically use:", opts: ["Azure Databricks activity", "Lookup only", "Validation only", "Delete only"], correct: 0 },
+    ],
 
-const toast = document.getElementById("toast");
-const resultBox = document.getElementById("resultBox");
+    ADVANCED: [
+      { q: "Best approach for dynamic schema evolution in Data Flows:", opts: ["Allow schema drift + rule-based mapping", "Hardcode every column always", "Disable drift and stop pipelines", "Only use Copy Activity"], correct: 0 },
+      { q: "How to implement idempotent loads in ADF?", opts: ["Watermark/CDC + merge/upsert", "Always full overwrite", "Only append forever", "Disable retries"], correct: 0 },
+      { q: "Handling slowly changing dimensions typically involves:", opts: ["SCD logic + merge strategy", "Only truncate", "Only delete", "Only copy to CSV"], correct: 0 },
+      { q: "For large scale ingestion, recommended design is:", opts: ["Metadata-driven pipelines + parameterized datasets", "One pipeline per file", "Manual runs only", "Hard-coded paths"], correct: 0 },
+      { q: "Best way to reduce unnecessary reprocessing:", opts: ["Watermark + incremental loads", "Always rerun full", "Disable triggers", "Copy to temp always"], correct: 0 },
+      { q: "Private endpoints are mainly for:", opts: ["Private access to PaaS without public internet", "Faster CPU", "Cheaper cost", "More UI features"], correct: 0 },
+      { q: "Common strategy for error handling at scale:", opts: ["Centralized logging + retry + dead-letter pattern", "Ignore failures", "Stop all triggers", "Hardcode try/catch"], correct: 0 },
+      { q: "Orchestrating Databricks notebooks with parameters uses:", opts: ["ADF Databricks activity + base parameters", "Copy activity", "Wait activity", "Filter activity"], correct: 0 },
+      { q: "Avoid hot partitions in sinks by:", opts: ["Repartition with good keys / distribute evenly", "Single partition always", "Coalesce to 1 always", "Disable partitioning"], correct: 0 },
+      { q: "To support multi-env CI/CD, you should:", opts: ["ARM/Bicep + parameterization + DevOps", "Manually edit prod always", "Use one factory only", "Avoid Git integration"], correct: 0 },
 
-/** =========================
- * HELPERS
- * ========================= */
-function showToast(msg){
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(()=> toast.classList.remove("show"), 1600);
-}
+      // +15 more (Advanced)
+      { q: "A robust audit framework typically stores:", opts: ["Pipeline run metadata + row counts + error details", "Only dashboard screenshots", "Only dataset names", "Only Git commits"], correct: 0 },
+      { q: "To handle late-arriving data in windowed loads, you can:", opts: ["Use backfill strategy + watermark adjustments", "Ignore permanently", "Disable triggers", "Only full reload daily"], correct: 0 },
+      { q: "A good pattern to isolate failures per entity is:", opts: ["ForEach with try/catch style + logging per item", "One giant copy job", "No logging", "Only manual runs"], correct: 0 },
+      { q: "For exactly-once style loads, you usually need:", opts: ["Idempotency + merge semantics", "Only append", "No retries", "Disable monitoring"], correct: 0 },
+      { q: "For schema changes across many sources, prefer:", opts: ["Rule-based mapping + drift + metadata-driven configs", "One mapping per column forever", "Stop ingestion on any new column", "Only CSV always"], correct: 0 },
+      { q: "To reduce Data Flow cost, you can:", opts: ["Use timeouts + smaller compute + avoid unnecessary transformations", "Always max compute", "Always full refresh", "Disable parameterization"], correct: 0 },
+      { q: "Handling cross-region secure access often uses:", opts: ["Private Link + VNet integration + managed identity", "Public endpoints only", "Anonymous access", "Only FTP"], correct: 0 },
+      { q: "For very large tables, best incremental approach is:", opts: ["CDC/change tracking + partition pruning", "Full overwrite nightly", "Random sampling", "Disable indexes"], correct: 0 },
+      { q: "A common way to standardize pipelines is:", opts: ["Templates + metadata configs + reusable activities", "Hardcode everything", "Avoid naming standards", "No variables"], correct: 0 },
+      { q: "When Copy Activity hits throttling, you can:", opts: ["Tune parallelism/DIUs + retries/backoff", "Disable retries", "Stop pipeline", "Remove monitoring"], correct: 0 },
+      { q: "To ensure reliability, you should measure:", opts: ["SLA metrics + retries + failure rates + latency", "Only number of pipelines", "Only storage size", "Only UI clicks"], correct: 0 },
+      { q: "For sensitive data, best practice includes:", opts: ["Key Vault + managed identity + private endpoints", "Store secrets in code", "Public access allowed", "Email credentials"], correct: 0 },
+      { q: "A scalable approach for 100s pipelines is:", opts: ["Metadata-driven orchestration (config-driven)", "Manual pipeline per source", "One dataset per file", "No parameters"], correct: 0 },
+      { q: "To validate data quality at scale, you can:", opts: ["Add reconciliation checks + row counts + thresholds", "Skip validation", "Only check once a month", "Only rely on UI"], correct: 0 },
+      { q: "To prevent duplicate loads on reruns, use:", opts: ["RunId-based dedupe + merge keys", "Always append", "Disable logs", "Disable retries"], correct: 0 },
+    ]
+  };
 
-function shuffleCrypto(arr){
-  const a = arr.slice();
-  const rand = (n) => (crypto.getRandomValues(new Uint32Array(1))[0] % n);
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = rand(i + 1);
-    [a[i], a[j]] = [a[j], a[i]];
+  // ====== State ======
+  let selected = []; // current attempt questions (with shuffled options baked in)
+  let idx = -1;
+  let started = false;
+  let chosen = {}; // idx -> selectedOptionIndex
+
+  // ====== DOM ======
+  const elName = document.getElementById('candidateName');
+  const elDiff = document.getElementById('difficulty');
+  const elQText = document.getElementById('qText');
+  const elQMeta = document.getElementById('qMeta');
+  const elOpts = document.getElementById('options');
+  const elPill = document.getElementById('statusPill');
+  const elResult = document.getElementById('resultBox');
+  const toast = document.getElementById('toast');
+
+  const btnStart = document.getElementById('btnStart');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const btnComplete = document.getElementById('btnComplete');
+
+  const confirmBackdrop = document.getElementById('confirmBackdrop');
+  const confirmText = document.getElementById('confirmText');
+  const btnGoBack = document.getElementById('btnGoBack');
+  const btnSubmitAnyway = document.getElementById('btnSubmitAnyway');
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(()=> toast.classList.remove('show'), 1600);
   }
-  return a;
-}
 
-async function loadBank(difficulty){
-  const url = BANK_URL[difficulty];
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load question bank: " + url);
-  const bank = await res.json();
-  if (!Array.isArray(bank)) throw new Error("Question bank must be an array in JSON.");
-  return bank;
-}
-
-/** Build 25-question attempt:
- * - shuffle bank
- * - take first 25
- * - for each question: shuffle options AND recalc correct index
- */
-function buildAttempt(bank){
-  if (bank.length < QUESTIONS_PER_ATTEMPT){
-    throw new Error(`Bank has only ${bank.length} questions. Need at least ${QUESTIONS_PER_ATTEMPT}.`);
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 
-  const picked = shuffleCrypto(bank).slice(0, QUESTIONS_PER_ATTEMPT);
-
-  return picked.map((q, qi) => {
-    const opts = (q.opts || []).map((text, i) => ({ originalIndex: i, text }));
-    const shuffledOpts = shuffleCrypto(opts);
-    const newCorrect = shuffledOpts.findIndex(o => o.originalIndex === q.correct);
-
-    return {
-      no: qi + 1,            // serial 1..25
-      q: q.q,
-      opts: shuffledOpts.map(o => o.text),
-      correct: newCorrect
-    };
-  });
-}
-
-function setButtons(){
-  btnPrev.disabled = !started || idx <= 0;
-  btnNext.disabled = !started || idx < 0;
-  btnComplete.disabled = !started || attempt.length !== QUESTIONS_PER_ATTEMPT;
-}
-
-function setPill(){
-  if (!started){
-    elPill.textContent = "Not started";
-    return;
+  function setButtons(){
+    btnPrev.disabled = !started || idx <= 0;
+    btnNext.disabled = !started || idx < 0;
+    btnComplete.disabled = !started || selected.length === 0;
   }
-  const answered = Object.keys(chosen).length;
-  elPill.textContent = `In progress: ${answered}/${QUESTIONS_PER_ATTEMPT} answered`;
-}
 
-function render(){
-  if (!started || idx < 0){
-    elQMeta.textContent = `0 / ${QUESTIONS_PER_ATTEMPT}`;
-    elQText.innerHTML = `Click <b>Start</b> to begin.`;
-    elOptions.innerHTML = "";
+  function countAnswered(){
+    return Object.keys(chosen).filter(k => Number.isInteger(chosen[k])).length;
+  }
+
+  function setPill(){
+    if (!started) return elPill.textContent = "Not started";
+    const answered = countAnswered();
+    elPill.textContent = `In progress: ${answered}/${selected.length} answered`;
+  }
+
+  function createAttemptQuestions(diff){
+    // shuffle questions every Start
+    const qs = shuffle(BANK[diff]).slice(0, 25);
+
+    // shuffle options for each question and preserve correct mapping
+    return qs.map(q => {
+      const options = q.opts.map((t, i) => ({ key: i, text: t })); // key = original index
+      const shuffledOpts = shuffle(options);
+      const correctIndex = shuffledOpts.findIndex(o => o.key === q.correct);
+      return {
+        q: q.q,
+        opts: shuffledOpts.map(o => o.text),
+        correct: correctIndex
+      };
+    });
+  }
+
+  function render(){
+    if (!started || idx < 0) {
+      elQText.innerHTML = 'Click <b>Start</b> to begin.';
+      elQMeta.textContent = '0 / 0';
+      elOpts.innerHTML = '';
+      elResult.style.display = "none";
+      setButtons();
+      setPill();
+      return;
+    }
+
+    const q = selected[idx];
+    elQText.textContent = q.q;
+    elQMeta.textContent = `${idx + 1} / ${selected.length}`;
+
+    const picked = chosen[idx];
+    elOpts.innerHTML = q.opts.map((t, oi) => {
+      const checked = picked === oi ? 'checked' : '';
+      return `
+        <label class="opt">
+          <input type="radio" name="opt" value="${oi}" ${checked}/>
+          <div>${t}</div>
+        </label>
+      `;
+    }).join('');
+
+    elOpts.querySelectorAll('input[name="opt"]').forEach(r => {
+      r.addEventListener('change', (e) => {
+        chosen[idx] = Number(e.target.value);
+        setPill();
+      });
+    });
+
     setButtons();
     setPill();
-    return;
   }
 
-  const item = attempt[idx];
-  elQMeta.textContent = `${item.no} / ${QUESTIONS_PER_ATTEMPT}`;
-  elQText.textContent = item.q;
-
-  const selectedOpt = (chosen[idx] ?? null);
-
-  elOptions.innerHTML = item.opts.map((optText, oi) => {
-    const isSel = (selectedOpt === oi);
-    return `
-      <label class="opt ${isSel ? "selected" : ""}">
-        <input type="radio" name="opt" value="${oi}" ${isSel ? "checked" : ""} />
-        <div><strong>${String.fromCharCode(65 + oi)}.</strong> ${escapeHtml(optText)}</div>
-      </label>
-    `;
-  }).join("");
-
-  // listen selection
-  [...elOptions.querySelectorAll('input[type="radio"]')].forEach(r => {
-    r.addEventListener("change", (e) => {
-      const v = parseInt(e.target.value, 10);
-      chosen[idx] = v;
-      render(); // update highlight
-      setPill();
+  function computeScore(){
+    let correct = 0;
+    selected.forEach((q, i) => {
+      if (chosen[i] === q.correct) correct++;
     });
-  });
-
-  setButtons();
-  setPill();
-}
-
-function escapeHtml(s){
-  return String(s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-function calcScore(){
-  let correct = 0;
-  for (let i = 0; i < attempt.length; i++){
-    const ans = chosen[i];
-    if (ans === attempt[i].correct) correct++;
-  }
-  const total = attempt.length;
-  const percent = Math.round((correct / total) * 100);
-  return { correct, total, percent };
-}
-
-function unansweredCount(){
-  let miss = 0;
-  for (let i = 0; i < attempt.length; i++){
-    if (chosen[i] === undefined) miss++;
-  }
-  return miss;
-}
-
-/** Build payload for Apps Script */
-function buildSubmitPayload(){
-  const name = (elName.value || "").trim() || "Candidate";
-  const difficulty = elDiff.value;
-  const ts = new Date().toISOString();
-  const score = calcScore();
-
-  const answers = attempt.map((q, i) => ({
-    no: q.no,
-    question: q.q,
-    options: q.opts,
-    selectedIndex: (chosen[i] ?? null),
-    correctIndex: q.correct,
-    isCorrect: (chosen[i] === q.correct)
-  }));
-
-  return {
-    secret: SUBMIT_SECRET,
-    name,
-    difficulty,
-    createdAt: ts,
-    score,
-    answers
-  };
-}
-
-async function submitToGoogleIfEnabled(){
-  if (!APPS_SCRIPT_URL) return { skipped: true };
-
-  const payload = buildSubmitPayload();
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-
-  if (!res.ok) throw new Error("Submit failed");
-  return await res.json().catch(()=> ({}));
-}
-
-/** =========================
- * EVENTS
- * ========================= */
-btnStart.addEventListener("click", async () => {
-  resultBox.style.display = "none";
-  resultBox.innerHTML = "";
-
-  const name = (elName.value || "").trim();
-  if (!name){
-    showToast("Please enter candidate name.");
-    return;
+    const total = selected.length;
+    const percent = total ? Math.round((correct / total) * 100) : 0;
+    return { correct, total, percent };
   }
 
-  try{
-    const bank = await loadBank(elDiff.value);
-    attempt = buildAttempt(bank);  // ALWAYS 25
+  function passFailMessage(percent, difficulty){
+    if (percent >= PASS_PERCENT) {
+      return `Congratulations! You passed the ADF ${difficulty.toLowerCase()} test. Keep up the great work and continue strengthening your ADF fundamentals.`;
+    }
+    // Suggested best message for below 80%
+    return `Thanks for taking the test. Your score is ${percent}%. Don’t worry—review the topics you missed, practice a bit more, and try again. Consistency will get you there.`;
+  }
+
+  async function submitToGoogle(){
+    const candidate = (elName.value || '').trim();
+    if (!candidate) {
+      showToast("Please enter candidate name.");
+      return { ok:false, error:"Missing candidate name" };
+    }
+
+    const difficulty = (elDiff.value || "BASIC").toUpperCase();
+    const { correct, total, percent } = computeScore();
+
+    const questionsPayload = selected.map((q, i) => {
+      const selectedIndex = chosen[i];
+      return {
+        order: i + 1,
+        question: q.q,
+        selectedIndex: Number.isInteger(selectedIndex) ? selectedIndex : null,
+        selectedText: Number.isInteger(selectedIndex) ? q.opts[selectedIndex] : null,
+        correctIndex: q.correct,
+        correctText: q.opts[q.correct],
+        isCorrect: Number.isInteger(selectedIndex) && selectedIndex === q.correct
+      };
+    });
+
+    const payload = {
+      secret: SECRET_KEY,
+      candidate,
+      difficulty,
+      total,
+      correct,
+      percent,
+      questions: questionsPayload
+    };
+
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+
+    return await res.json();
+  }
+
+  function openConfirmModal(answered, notAnswered){
+    confirmText.textContent =
+      `You have answered ${answered} out of ${selected.length} questions. ` +
+      `${notAnswered} question(s) are not answered yet. Are you sure you want to submit?`;
+    confirmBackdrop.style.display = "flex";
+  }
+
+  function closeConfirmModal(){
+    confirmBackdrop.style.display = "none";
+  }
+
+  async function finalizeSubmit(){
+    const difficulty = (elDiff.value || "BASIC").toUpperCase();
+    const { correct, total, percent } = computeScore();
+
+    elResult.style.display = "block";
+    elResult.innerHTML = `
+      <b>Result</b><br/>
+      Score: <b>${correct}/${total}</b><br/>
+      Percentage: <b>${percent}%</b><br/><br/>
+      <span>${passFailMessage(percent, difficulty)}</span><br/><br/>
+      <span>${FINAL_SAVE_MESSAGE}</span>
+    `;
+
+    try {
+      showToast("Submitting...");
+      const data = await submitToGoogle();
+      if (data && data.ok) {
+        showToast("Submitted successfully");
+        // Requirement: do NOT show file name/url on the page.
+      } else {
+        showToast("Submit failed");
+        // Optional: show minimal error without exposing file info
+        elResult.innerHTML += `<br/><br/> Submit failed. Please try again.`;
+      }
+    } catch (e) {
+      showToast("Network error");
+      elResult.innerHTML += `<br/><br/> Network error. Please try again.`;
+    }
+  }
+
+  // ====== Events ======
+  btnStart.addEventListener('click', () => {
+    const candidate = (elName.value || '').trim();
+    if (!candidate) {
+      showToast("Please enter candidate name.");
+      return;
+    }
+
+    const diff = (elDiff.value || "BASIC").toUpperCase();
+    const bank = BANK[diff];
+    if (!bank || bank.length < 25) {
+      showToast("Question bank is incomplete for this difficulty.");
+      return;
+    }
+
+    // Shuffle questions + options every time you click Start
+    selected = createAttemptQuestions(diff);
     chosen = {};
     idx = 0;
     started = true;
-    showToast("Started: 25 questions");
+
+    elResult.style.display = "none";
+    elResult.innerHTML = "";
+    showToast(`Started: ${selected.length} questions (${diff})`);
     render();
-  }catch(e){
-    console.error(e);
-    showToast("Error loading questions. Check JSON path/format.");
-  }
-});
+  });
 
-btnPrev.addEventListener("click", () => {
-  if (!started) return;
-  idx = Math.max(0, idx - 1);
-  render();
-});
-
-btnNext.addEventListener("click", () => {
-  if (!started) return;
-
-  // Save current selection already stored in `chosen[idx]`
-  if (idx < attempt.length - 1){
-    idx += 1;
+  btnPrev.addEventListener('click', () => {
+    idx = Math.max(0, idx - 1);
     render();
-  } else {
-    showToast("Last question reached. Click Complete.");
-  }
-});
+  });
 
-btnComplete.addEventListener("click", async () => {
-  if (!started) return;
-
-  const miss = unansweredCount();
-  if (miss > 0){
-    const ok = confirm(`${miss} question(s) are not answered yet.\nAre you sure to submit?`);
-    if (!ok) return;
-  }
-
-  const { correct, total, percent } = calcScore();
-
-  // show result
-  const pass = percent >= 80;
-  const msg = pass
-    ? `Congratulations! You passed the test (${percent}%).`
-    : `Sorry, your score is ${percent}%. Please try again after more preparation.`;
-
-  resultBox.style.display = "block";
-  resultBox.innerHTML = `
-    <div><strong>Score:</strong> ${correct} / ${total} (${percent}%)</div>
-    <div style="margin-top:6px;" class="${pass ? "ok" : "bad"}"><strong>${msg}</strong></div>
-    <div style="margin-top:10px; color: var(--muted); font-size:12px;">
-      Answers saved. if needed please contact to PVRCLOUDTECH.
-    </div>
-  `;
-
-  // submit to google if enabled
-  try{
-    if (APPS_SCRIPT_URL){
-      showToast("Submitting to Google...");
-      await submitToGoogleIfEnabled();
-      showToast("Submitted successfully.");
-    } else {
-      // no submit - just local result
-      showToast("Completed.");
+  btnNext.addEventListener('click', () => {
+    // Save&Next requires selection
+    if (!Number.isInteger(chosen[idx])) {
+      showToast("Please select an option before moving next.");
+      return;
     }
-  }catch(e){
-    console.error(e);
-    showToast("Submit failed. Please contact PVRCLOUDTECH.");
-  }
+    if (idx < selected.length - 1) idx += 1;
+    render();
+  });
 
-  // lock UI after complete
-  btnNext.disabled = true;
-  btnPrev.disabled = true;
-  btnComplete.disabled = true;
-  btnStart.disabled = true;
-  elDiff.disabled = true;
-  elName.disabled = true;
-  started = false;
-  elPill.textContent = "Completed";
-});
+  btnComplete.addEventListener('click', () => {
+    // Confirm unanswered before submit
+    const answered = countAnswered();
+    const notAnswered = selected.length - answered;
 
-/** Initial render */
-render();
+    if (notAnswered > 0) {
+      openConfirmModal(answered, notAnswered);
+      return;
+    }
+
+    // If all answered, submit directly
+    finalizeSubmit();
+  });
+
+  btnGoBack.addEventListener('click', () => {
+    closeConfirmModal();
+  });
+
+  btnSubmitAnyway.addEventListener('click', () => {
+    closeConfirmModal();
+    finalizeSubmit();
+  });
+
+  render();
 </script>
 </body>
 </html>
