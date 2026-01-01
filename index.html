@@ -112,24 +112,8 @@ body::before{
     .toast.show { opacity: 1; }
 
     /* Confirm modal */
-    .modalBackdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.55);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  z-index: 9999;       
-}
-    .modal {
-      width: min(520px, 100%);
-      background: rgba(18,26,51,.98);
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 16px;
-      padding: 14px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.45);
-    }
+    .modalBackdrop { position: fixed; inset:0; background: rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:16px; }
+    .modal { width: min(520px, 100%); background: rgba(18,26,51,.98); border:1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.45); }
     .modal h3 { margin:0 0 8px; font-size: 16px; }
     .modal p { margin:0; color: var(--muted); line-height: 1.45; }
     .modalBtns { display:flex; gap:10px; justify-content:flex-end; margin-top: 12px; flex-wrap: wrap; }
@@ -206,63 +190,110 @@ body::before{
       <h3>Confirm Submission</h3>
       <p id="confirmText"></p>
       <div class="modalBtns">
-        <button type="button" class="btn" id="btnGoBack">Go back</button>
-        <button type="button" class="btn primary" id="btnSubmitAnyway">Submit</button>
+        <button class="btn" id="btnGoBack">Go back</button>
+        <button class="btn primary" id="btnSubmitAnyway">Submit</button>
       </div>
     </div>
   </div>
 
 <script>
+  // ====== SET THESE ======
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybwb64eeuRUTkSRCEMBog02YA-q5NhJPx9hnKgmlaSN_x04_OOPeKtIsrXxqz1MEY/exec";
-  const SECRET_KEY = "PVR_MCQ_interview_2026";
-  const QUESTIONS_PER_TEST = 25;
+  const SECRET_KEY = "PVR_MCQ_interview_2026"; // must match Apps Script
+
   const PASS_PERCENT = 80;
   const FINAL_SAVE_MESSAGE = "Answers saved. If needed please contact to PVRCLOUDTECH.";
 
-  // DOM
-  const elName = document.getElementById("candidateName");
-  const elPhone = document.getElementById("candidatePhone");
-  const elEmail = document.getElementById("candidateEmail");
-  const elDiff = document.getElementById("difficulty");
-  const elQText = qText;
-  const elQMeta = qMeta;
-  const elOpts = options;
-  const elPill = statusPill;
-  const elResult = resultBox;
-  const toast = document.getElementById("toast");
+  async function loadQuestionBank(difficulty){
+  const map = {
+    basic: "./data/adf_basic.json",
+    intermediate: "./data/adf_intermediate.json",
+    advanced: "./data/adf_advanced.json"
+  };
+  const url = map[difficulty];
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Failed to load bank: ${url}`);
+  const bank = await res.json();
+  return bank;
+}
 
-  const btnStart = document.getElementById("btnStart");
-  const btnPrev = document.getElementById("btnPrev");
-  const btnNext = document.getElementById("btnNext");
-  const btnComplete = document.getElementById("btnComplete");
+// Strong shuffle using crypto
+function shuffleCrypto(arr){
+  const a = arr.slice();
+  const rand = (n) => crypto.getRandomValues(new Uint32Array(1))[0] % n;
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rand(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
+// Pick N questions, shuffle options, remap correct index
+function buildAttempt(bank, n){
+  const picked = shuffleCrypto(bank).slice(0, Math.min(n, bank.length));
 
-  const confirmBackdrop = document.getElementById("confirmBackdrop");
-  const confirmText = document.getElementById("confirmText");
-  const btnGoBack = document.getElementById("btnGoBack");
-  const btnSubmitAnyway = document.getElementById("btnSubmitAnyway");
+  return picked.map((qObj, serialIndex) => {
+    const originalOpts = qObj.opts.map((text, i) => ({ i, text }));
+    const shuffledOpts = shuffleCrypto(originalOpts);
 
+    const newCorrect = shuffledOpts.findIndex(x => x.i === qObj.correct);
 
-  // State
-  let selected = [];
-  let chosen = {};
+    return {
+      id: qObj.id || String(serialIndex + 1),
+      q: qObj.q,
+      opts: shuffledOpts.map(x => x.text),
+      correct: newCorrect
+    };
+  });
+}
+
+  // ====== State ======
+  let selected = []; // current attempt questions (with shuffled options baked in)
   let idx = -1;
   let started = false;
+  let chosen = {}; // idx -> selectedOptionIndex
+
+  // ====== DOM ======
+  const elName = document.getElementById('candidateName');
+  const elPhone = document.getElementById('candidatePhone');
+  const elEmail = document.getElementById('candidateEmail');
+  const elDiff = document.getElementById('difficulty');
+  const elQText = document.getElementById('qText');
+  const elQMeta = document.getElementById('qMeta');
+  const elOpts = document.getElementById('options');
+  const elPill = document.getElementById('statusPill');
+  const elResult = document.getElementById('resultBox');
+  const toast = document.getElementById('toast');
+
+  const btnStart = document.getElementById('btnStart');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const btnComplete = document.getElementById('btnComplete');
+
+  const confirmBackdrop = document.getElementById('confirmBackdrop');
+  const confirmText = document.getElementById('confirmText');
+  const btnGoBack = document.getElementById('btnGoBack');
+  const btnSubmitAnyway = document.getElementById('btnSubmitAnyway');
 
   function showToast(msg){
     toast.textContent = msg;
-    toast.classList.add("show");
-    setTimeout(()=>toast.classList.remove("show"),1800);
+    toast.classList.add('show');
+    setTimeout(()=> toast.classList.remove('show'), 1600);
   }
-
   function validateCandidateDetails(){
+    const name = (elName.value || '').trim();
+    const phone = (elPhone.value || '').trim();
+    const email = (elEmail.value || '').trim();
+  
     const missing = [];
-    if(!elName.value.trim()) missing.push("candidate name");
-    if(!elPhone.value.trim()) missing.push("phone number");
-    if(!elEmail.value.trim()) missing.push("mail id");
-
-    if(missing.length){
-      showToast(`Please enter ${missing.join(", ")}.`);
+    if (!name) missing.push('candidate name');
+    if (!phone) missing.push('phone number');
+    if (!email) missing.push('mail id');
+  
+    if (missing.length) {
+      // Message as per your requirement:
+      // "please enter candidate name, phone number, add mail id."
+      showToast(`Please enter ${missing.join(', ')}.`);
       return false;
     }
     return true;
@@ -270,115 +301,250 @@ body::before{
 
   function shuffle(arr){
     const a = arr.slice();
-    for(let i=a.length-1;i>0;i--){
-      const j = crypto.getRandomValues(new Uint32Array(1))[0] % (i+1);
-      [a[i],a[j]]=[a[j],a[i]];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
   }
 
-  async function loadQuestionBank(diff){
-    const map = {
-      basic:"./data/adf_basic.json",
-      intermediate:"./data/adf_intermediate.json",
-      advanced:"./data/adf_advanced.json"
-    };
-    const res = await fetch(map[diff]+"?v="+Date.now());
-    if(!res.ok) throw new Error("JSON load failed");
-    return res.json();
-  }
-
-  function buildAttempt(bank){
-    return shuffle(bank).slice(0,QUESTIONS_PER_TEST).map((q)=>{
-      const opts = shuffle(q.opts.map((t,i)=>({t,i})));
-      return {
-        q:q.q,
-        opts:opts.map(o=>o.t),
-        correct:opts.findIndex(o=>o.i===q.correct)
-      };
-    });
+  function setButtons(){
+    btnPrev.disabled = !started || idx <= 0;
+    btnNext.disabled = !started || idx < 0;
+    btnComplete.disabled = !started || selected.length === 0;
   }
 
   function countAnswered(){
-    return Object.keys(chosen).length;
+    return Object.keys(chosen).filter(k => Number.isInteger(chosen[k])).length;
   }
 
-  function render(){
-    if(!started){
-      elQText.innerHTML="Click <b>Start</b> to begin.";
-      elQMeta.textContent="0 / 0";
-      elOpts.innerHTML="";
-      return;
-    }
-    const q = selected[idx];
-    elQText.textContent=q.q;
-    elQMeta.textContent=`${idx+1} / ${selected.length}`;
-    elOpts.innerHTML=q.opts.map((t,i)=>`
-      <label class="opt">
-        <input type="radio" name="opt" value="${i}" ${chosen[idx]===i?"checked":""}>
-        <div>${t}</div>
-      </label>
-    `).join("");
+  function setPill(){
+    if (!started) return elPill.textContent = "Not started";
+    const answered = countAnswered();
+    elPill.textContent = `In progress: ${answered}/${selected.length} answered`;
+  }
 
-    document.querySelectorAll('input[name="opt"]').forEach(r=>{
-      r.onchange=e=>{
-        chosen[idx]=+e.target.value;
-        elPill.textContent=`In progress: ${countAnswered()}/${selected.length} answered`;
+  function createAttemptQuestions(diff){
+    // shuffle questions every Start
+    const qs = shuffle(BANK[diff]).slice(0, 25);
+
+    // shuffle options for each question and preserve correct mapping
+    return qs.map(q => {
+      const options = q.opts.map((t, i) => ({ key: i, text: t })); // key = original index
+      const shuffledOpts = shuffle(options);
+      const correctIndex = shuffledOpts.findIndex(o => o.key === q.correct);
+      return {
+        q: q.q,
+        opts: shuffledOpts.map(o => o.text),
+        correct: correctIndex
       };
     });
   }
 
-  function openConfirmModal(answered){
-    confirmText.textContent =
-      `You have answered ${answered} out of ${selected.length} questions. ` +
-      `${selected.length-answered} question(s) are not answered yet. Are you sure you want to submit?`;
-    document.body.style.overflow="hidden";
-    confirmBackdrop.style.display="flex";
-  }
+  function render(){
+    if (!started || idx < 0) {
+      elQText.innerHTML = 'Click <b>Start</b> to begin.';
+      elQMeta.textContent = '0 / 0';
+      elOpts.innerHTML = '';
+      elResult.style.display = "none";
+      setButtons();
+      setPill();
+      return;
+    }
 
-  function closeConfirmModal(){
-    confirmBackdrop.style.display="none";
-    document.body.style.overflow="";
+    const q = selected[idx];
+    elQText.textContent = q.q;
+    elQMeta.textContent = `${idx + 1} / ${selected.length}`;
+
+    const picked = chosen[idx];
+    elOpts.innerHTML = q.opts.map((t, oi) => {
+      const checked = picked === oi ? 'checked' : '';
+      return `
+        <label class="opt">
+          <input type="radio" name="opt" value="${oi}" ${checked}/>
+          <div>${t}</div>
+        </label>
+      `;
+    }).join('');
+
+    elOpts.querySelectorAll('input[name="opt"]').forEach(r => {
+      r.addEventListener('change', (e) => {
+        chosen[idx] = Number(e.target.value);
+        setPill();
+      });
+    });
+
+    setButtons();
+    setPill();
   }
 
   function computeScore(){
-    let c=0;
-    selected.forEach((q,i)=>{ if(chosen[i]===q.correct) c++; });
-    return Math.round((c/selected.length)*100);
+    let correct = 0;
+    selected.forEach((q, i) => {
+      if (chosen[i] === q.correct) correct++;
+    });
+    const total = selected.length;
+    const percent = total ? Math.round((correct / total) * 100) : 0;
+    return { correct, total, percent };
+  }
+
+  function passFailMessage(percent, difficulty){
+    if (percent >= PASS_PERCENT) {
+      return `Congratulations! You passed the ADF ${difficulty.toLowerCase()} test. Keep up the great work and continue strengthening your ADF fundamentals.`;
+    }
+    // Suggested best message for below 80%
+    return `Thanks for taking the test. Your score is ${percent}%. Don’t worry—review the topics you missed, practice a bit more, and try again. Consistency will get you there.`;
+  }
+
+  async function submitToGoogle(){
+    const candidate = (elName.value || '').trim();
+    if (!candidate) {
+      showToast("Please enter candidate name.");
+      return { ok:false, error:"Missing candidate name" };
+    }
+
+    const difficulty = (elDiff.value || "BASIC").toUpperCase();
+    const { correct, total, percent } = computeScore();
+
+    const questionsPayload = selected.map((q, i) => {
+      const selectedIndex = chosen[i];
+      return {
+        order: i + 1,
+        question: q.q,
+        selectedIndex: Number.isInteger(selectedIndex) ? selectedIndex : null,
+        selectedText: Number.isInteger(selectedIndex) ? q.opts[selectedIndex] : null,
+        correctIndex: q.correct,
+        correctText: q.opts[q.correct],
+        isCorrect: Number.isInteger(selectedIndex) && selectedIndex === q.correct
+      };
+    });
+
+    const payload = {
+      secret: SECRET_KEY,
+      candidate,
+      difficulty,
+      total,
+      correct,
+      percent,
+      questions: questionsPayload
+    };
+
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+
+    return await res.json();
+  }
+
+  function openConfirmModal(answered, notAnswered){
+    confirmText.textContent =
+      `You have answered ${answered} out of ${selected.length} questions. ` +
+      `${notAnswered} question(s) are not answered yet. Are you sure you want to submit?`;
+    confirmBackdrop.style.display = "flex";
+  }
+
+  function closeConfirmModal(){
+    confirmBackdrop.style.display = "none";
   }
 
   async function finalizeSubmit(){
-    closeConfirmModal();
-    const percent = computeScore();
-    elResult.style.display="block";
-    elResult.innerHTML=`
-      <b>Result</b><br>
-      Percentage: <b>${percent}%</b><br><br>
-      ${percent>=PASS_PERCENT
-        ?`Congratulations! You passed the ADF test.`
-        :`Thanks for taking the test. Your score is ${percent}%. Please practice and try again.`}
-      <br><br>${FINAL_SAVE_MESSAGE}
+    const difficulty = (elDiff.value || "BASIC").toUpperCase();
+    const { correct, total, percent } = computeScore();
+
+    elResult.style.display = "block";
+    elResult.innerHTML = `
+      <b>Result</b><br/>
+      Score: <b>${correct}/${total}</b><br/>
+      Percentage: <b>${percent}%</b><br/><br/>
+      <span>${passFailMessage(percent, difficulty)}</span><br/><br/>
+      <span>${FINAL_SAVE_MESSAGE}</span>
     `;
-    showToast("Submitted successfully");
+
+    try {
+      showToast("Submitting...");
+      const data = await submitToGoogle();
+      if (data && data.ok) {
+        showToast("Submitted successfully");
+        // Requirement: do NOT show file name/url on the page.
+      } else {
+        showToast("Submit failed");
+        // Optional: show minimal error without exposing file info
+        elResult.innerHTML += `<br/><br/> Submit failed. Please try again.`;
+      }
+    } catch (e) {
+      showToast("Network error");
+      elResult.innerHTML += `<br/><br/> Network error. Please try again.`;
+    }
   }
 
-  // Events
-  btnStart.onclick=async()=>{
-    if(!validateCandidateDetails()) return;
-    const bank=await loadQuestionBank(elDiff.value);
-    selected=buildAttempt(bank);
-    chosen={}; idx=0; started=true;
-    render();
-  };
+  // ====== Events ======
+  btnStart.addEventListener("click", async () => {
+  if (!validateCandidateDetails()) return;
+  try {
+    const n = parseInt(elCount.value, 10) || 25;
+    const diff = document.getElementById("difficulty").value; // basic/intermediate/advanced
 
-  btnPrev.onclick=()=>{ if(idx>0){idx--;render();}};
-  btnNext.onclick=()=>{ if(chosen[idx]!=null){idx++;render();} else showToast("Select an option"); };
-  btnComplete.onclick=()=>{
-    const answered=countAnswered();
-    answered<selected.length ? openConfirmModal(answered) : finalizeSubmit();
-  };
-  btnGoBack.onclick=closeConfirmModal;
-  btnSubmitAnyway.onclick=finalizeSubmit;
+    const bank = await loadQuestionBank(diff);
+
+    if (!Array.isArray(bank) || bank.length < 25) {
+      showToast("Question bank must have at least 25 questions.");
+      return;
+    }
+
+    selected = buildAttempt(bank, n);   // ✅ random 25 each attempt
+    answers = {};
+    idx = 0;
+    started = true;
+
+    showToast(`Started: ${selected.length} questions`);
+    render();
+  } catch (e) {
+    console.error(e);
+    showToast("Error loading questions. Check JSON file name/path.");
+  }
+});
+
+  btnPrev.addEventListener('click', () => {
+    idx = Math.max(0, idx - 1);
+    render();
+  });
+
+  btnNext.addEventListener('click', () => {
+    // Save&Next requires selection
+    if (!Number.isInteger(chosen[idx])) {
+      showToast("Please select an option before moving next.");
+      return;
+    }
+    if (idx < selected.length - 1) idx += 1;
+    render();
+  });
+
+  btnComplete.addEventListener('click', () => {
+    // Confirm unanswered before submit
+    const answered = countAnswered();
+    const notAnswered = selected.length - answered;
+
+    if (notAnswered > 0) {
+      openConfirmModal(answered, notAnswered);
+      return;
+    }
+
+    // If all answered, submit directly
+    finalizeSubmit();
+  });
+
+  btnGoBack.addEventListener('click', () => {
+    closeConfirmModal();
+  });
+
+  btnSubmitAnyway.addEventListener('click', () => {
+    closeConfirmModal();
+    finalizeSubmit();
+  });
+
+  render();
 </script>
 </body>
 </html>
