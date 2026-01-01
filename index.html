@@ -220,10 +220,10 @@ body::before{
   const FINAL_SAVE_MESSAGE = "Answers saved. If needed please contact to PVRCLOUDTECH.";
 
   // DOM
-  const elName = candidateName;
-  const elPhone = candidatePhone;
-  const elEmail = candidateEmail;
-  const elDiff = difficulty;
+  const elName = document.getElementById("candidateName");
+  const elPhone = document.getElementById("candidatePhone");
+  const elEmail = document.getElementById("candidateEmail");
+  const elDiff = document.getElementById("difficulty");
   const elQText = qText;
   const elQMeta = qMeta;
   const elOpts = options;
@@ -231,15 +231,17 @@ body::before{
   const elResult = resultBox;
   const toast = document.getElementById("toast");
 
-  const btnStart = btnStart;
-  const btnPrev = btnPrev;
-  const btnNext = btnNext;
-  const btnComplete = btnComplete;
+  const btnStart = document.getElementById("btnStart");
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const btnComplete = document.getElementById("btnComplete");
 
-  const confirmBackdrop = confirmBackdrop;
-  const confirmText = confirmText;
-  const btnGoBack = btnGoBack;
-  const btnSubmitAnyway = btnSubmitAnyway;
+
+  const confirmBackdrop = document.getElementById("confirmBackdrop");
+  const confirmText = document.getElementById("confirmText");
+  const btnGoBack = document.getElementById("btnGoBack");
+  const btnSubmitAnyway = document.getElementById("btnSubmitAnyway");
+
 
   // State
   let selected = [];
@@ -375,12 +377,13 @@ body::before{
     const answered=countAnswered();
     answered<selected.length ? openConfirmModal(answered) : finalizeSubmit();
   };
-  btnGoBack.onclick=closeConfirmModal;
-  btnSubmitAnyway.onclick=finalizeSubmit;
+  btnGoBack.addEventListener("click", () => {
+  closeConfirmModal();
+});
+btnSubmitAnyway.addEventListener("click", () => {
+  closeConfirmModal();
+  finalizeSubmit();
+});
 </script>
 </body>
 </html>
-
-
-
-
