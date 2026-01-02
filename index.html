@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ADF MCQ Test</title>
   <style>
+    select, option{
+    background: #000 !important;
+    color: #fff !important;
+  }
     /* Watermark background */
 body::before{
   content:"";
@@ -151,22 +155,22 @@ body::before{
     <div class="card">
       <div class="row">
   <div>
-    <label for="candidateName">Candidate name</label>
+    <label for="candidateName">Candidate Name</label>
     <input id="candidateName" type="text" placeholder="e.g., Srinivas" />
   </div>
 
   <div>
-    <label for="candidateEmail">Email address</label>
+    <label for="candidateEmail">Email Address</label>
     <input id="candidateEmail" type="email" placeholder="e.g., srinivas@gmail.com" />
   </div>
 
   <div>
-    <label for="candidatePhone">Mobile number</label>
+    <label for="candidatePhone">WhatsApp Number</label>
     <input id="candidatePhone" type="tel" placeholder="e.g., 9876543210" />
   </div>
 
   <div>
-    <label for="difficulty">Difficulty</label>
+    <label for="difficulty">Select Level</label>
     <select id="difficulty">
       <option value="BASIC">Basic</option>
       <option value="INTERMEDIATE">Intermediate</option>
@@ -445,6 +449,14 @@ body::before{
   let started = false;
   let chosen = {}; // idx -> selectedOptionIndex
 
+  let timerId = null;
+  let timeLeft = 0;  
+  function timePerQuestion(diff){
+    if (diff === "BASIC") return 20;
+    if (diff === "INTERMEDIATE") return 25;
+    return 30; // ADVANCED
+  }
+
   // ====== DOM ======
   const elName = document.getElementById('candidateName');
   const elEmail = document.getElementById('candidateEmail');
@@ -477,7 +489,50 @@ body::before{
   elEmail.readOnly = true;
   elPhone.readOnly = true;
 
+  function stopTimer(){
+    if (timerId) clearInterval(timerId);
+    timerId = null;
+  }
+  
+  function startTimer(){
+    stopTimer();
+    const diff = (elDiff.value || "BASIC").toUpperCase();
+    timeLeft = timePerQuestion(diff);
+  
+    // show timer in meta
+    updateMetaWithTimer();
+  
+    timerId = setInterval(() => {
+      timeLeft--;
+      updateMetaWithTimer();
+  
+      if (timeLeft <= 0) {
+        stopTimer();
+        autoNext(); // move even if not answered
+      }
+    }, 1000);
+  }
+  
+  function updateMetaWithTimer(){
+    if (!started || idx < 0) return;
+    elQMeta.textContent = `${idx + 1} / ${selected.length}  |  Time: ${timeLeft}s`;
+  }
+  
+  function autoNext(){
+    if (!started) return;
+  
+    // do NOT force selection, just move
+    if (idx < selected.length - 1) {
+      idx += 1;
+      render();
+      startTimer();
+    } else {
+      // last question timeout => auto submit
+      finalizeSubmit();
+    }
+  }
 
+  
   function showToast(msg){
     toast.textContent = msg;
     toast.classList.add('show');
@@ -641,6 +696,7 @@ body::before{
   }
 
   async function finalizeSubmit(){
+  stopTimer();
   const difficulty = (elDiff.value || "BASIC").toUpperCase();
   const { correct, total, percent } = computeScore();
 
@@ -711,11 +767,13 @@ body::before{
     elResult.innerHTML = "";
     showToast(`Started: ${selected.length} questions (${diff})`);
     render();
+    startTimer();
   });
 
   btnPrev.addEventListener('click', () => {
     idx = Math.max(0, idx - 1);
     render();
+    startTimer();
   });
 
   btnNext.addEventListener('click', () => {
@@ -726,6 +784,7 @@ body::before{
     }
     if (idx < selected.length - 1) idx += 1;
     render();
+    startTimer();
   });
 
   btnComplete.addEventListener('click', () => {
