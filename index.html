@@ -648,22 +648,23 @@ body::before{
     elPill.textContent = `In progress: ${answered}/${selected.length} answered`;
   }
 
-  function createAttemptQuestions(lockedDifficulty){
-    // shuffle questions every Start
-    const qs = shuffle(BANK[diff]).slice(0, 25);
+  function createAttemptQuestions(diff){
+  // shuffle questions every Start
+  const qs = shuffle(BANK[diff]).slice(0, 25);
 
-    // shuffle options for each question and preserve correct mapping
-    return qs.map(q => {
-      const options = q.opts.map((t, i) => ({ key: i, text: t })); // key = original index
-      const shuffledOpts = shuffle(options);
-      const correctIndex = shuffledOpts.findIndex(o => o.key === q.correct);
-      return {
-        q: q.q,
-        opts: shuffledOpts.map(o => o.text),
-        correct: correctIndex
-      };
-    });
-  }
+  // shuffle options for each question and preserve correct mapping
+  return qs.map(q => {
+    const options = q.opts.map((t, i) => ({ key: i, text: t }));
+    const shuffledOpts = shuffle(options);
+    const correctIndex = shuffledOpts.findIndex(o => o.key === q.correct);
+
+    return {
+      q: q.q,
+      opts: shuffledOpts.map(o => o.text),
+      correct: correctIndex
+    };
+  });
+}
 
   function isValidEmail(email){
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -728,7 +729,7 @@ body::before{
 
   function passFailMessage(percent, difficulty){
     if (percent >= PASS_PERCENT) {
-      return `Congratulations! You passed the ADF ${lockedDifficulty.toLowerCase()} test. Keep up the great work and continue strengthening your ADF fundamentals.`;
+      return `Congratulations! You passed the ADF ${difficulty.toLowerCase()} test. Keep up the great work and continue strengthening your ADF fundamentals.`;
     }
     // Suggested best message for below 80%
     return `Thanks for taking the test. Your score is ${percent}%. Don’t worry—review the topics you missed, practice a bit more, and try again. Consistency will get you there.`;
@@ -856,30 +857,33 @@ body::before{
       }
     
       lockedDifficulty = (elDiff.value || "BASIC").toUpperCase();
-      elDiff.disabled = true;
-      elDiff.style.opacity = "0.7";
-      elDiff.style.cursor = "not-allowed";
 
-      const bank = BANK[diff];
-      if (!bank || bank.length < 25) {
-        showToast("Question bank is incomplete for this difficulty.");
-        return;
-      }
-    
-      selected = createAttemptQuestions(lockedDifficulty);
-      chosen = {};
-      idx = 0;
-      started = true;
-    
-      elResult.style.display = "none";
-      elResult.innerHTML = "";
-    
-      showToast(`Started: ${selected.length} questions (${diff})`);
-      render();
-      startTimer();
-    
-      // once started, disable Start to prevent restart
-      btnStart.disabled = true;
+        // lock dropdown
+        elDiff.disabled = true;
+        elDiff.style.opacity = "0.7";
+        elDiff.style.cursor = "not-allowed";
+        
+        const bank = BANK[lockedDifficulty];
+        if (!bank || bank.length < 25) {
+          showToast("Question bank is incomplete for this difficulty.");
+          return;
+        }
+        
+        selected = createAttemptQuestions(lockedDifficulty);
+        chosen = {};
+        idx = 0;
+        started = true;
+        
+        elResult.style.display = "none";
+        elResult.innerHTML = "";
+        
+        showToast(`Started: ${selected.length} questions (${lockedDifficulty})`);
+        render();
+        startTimer();
+        
+        // once started, disable Start to prevent restart
+        btnStart.disabled = true;
+
     });
 
   // Prevent difficulty change after test starts (extra safety)
