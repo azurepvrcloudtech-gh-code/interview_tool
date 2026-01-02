@@ -169,6 +169,11 @@ body::before{
     <input id="candidatePhone" type="tel" placeholder="e.g., 9876543210" />
   </div>
 
+    <div class="toolbar">
+      <button class="btn" id="btnStart" disabled>Start</button>
+      <button class="btn primary" id="btnComplete" disabled>Complete</button>
+    </div>
+
   <div>
     <label for="difficulty">Select Level</label>
     <select id="difficulty">
@@ -191,7 +196,6 @@ body::before{
 
         <div class="toolbar">
           <button class="btn" id="btnStart">Start</button>
-          <button class="btn" id="btnPrev" disabled>Previous</button>
           <button class="btn primary" id="btnNext" disabled>Save & Next</button>
           <button class="btn primary" id="btnComplete" disabled>Complete</button>
         </div>
@@ -221,6 +225,19 @@ body::before{
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiMPJzS6aT0fkx5P6qojAf9mF9YlRpaQEQsJz2w3z489RgQVHPxtbGAkCSA7J_ADoY/exec";
   const SECRET_KEY = "PVR_MCQ_interview_2026"; // must match Apps Script
 
+  async function post(action, extra){
+  const payload = Object.assign({ secret: SECRET_KEY, action }, extra || {});
+  const res = await fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload),
+    redirect: "follow"
+  });
+  const text = await res.text();
+  try { return JSON.parse(text); }
+  catch { return { ok:false, error:"Non-JSON response: " + text.slice(0,160) }; }
+}
+
   function isRefreshNavigation(){
   const nav = performance.getEntriesByType("navigation")[0];
   if (nav && nav.type) return nav.type === "reload";
@@ -232,10 +249,44 @@ body::before{
     sessionStorage.clear();
     window.location.href = "login.html";
   }
+
   const SESSION_TOKEN = sessionStorage.getItem("pvr_sessionToken");
-  if (!SESSION_TOKEN) {
-    window.location.href = "login.html";
-  }
+
+  // Start disabled until server validates
+    btnStart.disabled = true;
+    
+    async function hardGuard(){
+      if (!SESSION_TOKEN) {
+        window.location.href = "login.html";
+        return;
+      }
+    
+      // HARD validation via Apps Script
+      const v = await post("validateSession", { sessionToken: SESSION_TOKEN });
+    
+      if (!v || !v.ok) {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+        return;
+      }
+    
+      // optional: refresh values from server truth
+      elName.value  = v.name || elName.value;
+      elEmail.value = v.email || elEmail.value;
+      elPhone.value = v.phone || elPhone.value;
+    
+      // lock inputs
+      elName.readOnly = true;
+      elEmail.readOnly = true;
+      elPhone.readOnly = true;
+    
+      // allow Start now
+      btnStart.disabled = false;
+    }
+    
+    // Run guard immediately
+    hardGuard();
+
   const PASS_PERCENT = 80;
   const FINAL_SAVE_MESSAGE = "Answers saved. If needed please contact to PVRCLOUDTECH.";
 
@@ -470,7 +521,6 @@ body::before{
   const toast = document.getElementById('toast');
 
   const btnStart = document.getElementById('btnStart');
-  const btnPrev = document.getElementById('btnPrev');
   const btnNext = document.getElementById('btnNext');
   const btnComplete = document.getElementById('btnComplete');
 
@@ -549,7 +599,6 @@ body::before{
   }
 
   function setButtons(){
-    btnPrev.disabled = !started || idx <= 0;
     btnNext.disabled = !started || idx < 0;
     btnComplete.disabled = !started || selected.length === 0;
   }
@@ -604,7 +653,7 @@ body::before{
 
     const q = selected[idx];
     elQText.textContent = q.q;
-    elQMeta.textContent = `${idx + 1} / ${selected.length}`;
+    updateMetaWithTimer();
 
     const picked = chosen[idx];
     elOpts.innerHTML = q.opts.map((t, oi) => {
@@ -621,6 +670,10 @@ body::before{
       r.addEventListener('change', (e) => {
         chosen[idx] = Number(e.target.value);
         setPill();
+        setTimeout(() => {
+        stopTimer();
+        autoNext();
+      }, 250);
       });
     });
 
@@ -695,6 +748,12 @@ body::before{
     confirmBackdrop.style.display = "none";
   }
 
+  function normalizePhone(p){
+  let x = String(p||"").replace(/\D/g,"");
+  if (x.length === 10) x = "91" + x;      // assume India
+  return x;
+}
+
   async function finalizeSubmit(){
   stopTimer();
   const difficulty = (elDiff.value || "BASIC").toUpperCase();
@@ -721,7 +780,7 @@ body::before{
       sessionStorage.setItem("pvr_lastResult", JSON.stringify({
         name: elName.value,
         email: elEmail.value,
-        phone: elPhone.value,
+        phone: normalizePhone(elPhone.value),
         difficulty,
         correct,
         total,
@@ -749,32 +808,37 @@ body::before{
 }
 
   // ====== Events ======
-  btnStart.addEventListener('click', () => {
-    const diff = (elDiff.value || "BASIC").toUpperCase();
-    const bank = BANK[diff];
-    if (!bank || bank.length < 25) {
-      showToast("Question bank is incomplete for this difficulty.");
-      return;
-    }
-
-    // Shuffle questions + options every time you click Start
-    selected = createAttemptQuestions(diff);
-    chosen = {};
-    idx = 0;
-    started = true;
-
-    elResult.style.display = "none";
-    elResult.innerHTML = "";
-    showToast(`Started: ${selected.length} questions (${diff})`);
-    render();
-    startTimer();
-  });
-
-  btnPrev.addEventListener('click', () => {
-    idx = Math.max(0, idx - 1);
-    render();
-    startTimer();
-  });
+  btnStart.addEventListener('click', async () => {
+      // ensure still valid before starting
+      const v = await post("validateSession", { sessionToken: SESSION_TOKEN });
+      if (!v || !v.ok) {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+        return;
+      }
+    
+      const diff = (elDiff.value || "BASIC").toUpperCase();
+      const bank = BANK[diff];
+      if (!bank || bank.length < 25) {
+        showToast("Question bank is incomplete for this difficulty.");
+        return;
+      }
+    
+      selected = createAttemptQuestions(diff);
+      chosen = {};
+      idx = 0;
+      started = true;
+    
+      elResult.style.display = "none";
+      elResult.innerHTML = "";
+    
+      showToast(`Started: ${selected.length} questions (${diff})`);
+      render();
+      startTimer();
+    
+      // once started, disable Start to prevent restart
+      btnStart.disabled = true;
+    });
 
   btnNext.addEventListener('click', () => {
     // Save&Next requires selection
@@ -788,16 +852,6 @@ body::before{
   });
 
   btnComplete.addEventListener('click', () => {
-    // Confirm unanswered before submit
-    const answered = countAnswered();
-    const notAnswered = selected.length - answered;
-
-    if (notAnswered > 0) {
-      openConfirmModal(answered, notAnswered);
-      return;
-    }
-
-    // If all answered, submit directly
     finalizeSubmit();
   });
 
