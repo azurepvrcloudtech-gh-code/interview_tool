@@ -283,12 +283,6 @@ body::before{
   if (nav && nav.type) return nav.type === "reload";
   return performance.navigation && performance.navigation.type === 1;
   }
-  
-  // Force re-login if page is refreshed
-  if (isRefreshNavigation()) {
-    sessionStorage.clear();
-    window.location.href = "login.html";
-  }
 
   const SESSION_TOKEN = sessionStorage.getItem("pvr_sessionToken");
 
@@ -343,9 +337,50 @@ body::before{
       // allow Start now
       btnStart.disabled = false;
     }
-    
+
+  async function restoreOrAutosubmitOnRefresh(){
+    const wasInProgress = sessionStorage.getItem("pvr_test_inprogress") === "1";
+    const wasStarted = sessionStorage.getItem("pvr_test_started") === "1";
+    const nav = performance.getEntriesByType("navigation")[0];
+    const isReload = nav ? nav.type === "reload" : (performance.navigation && performance.navigation.type === 1);
+  
+    if (!(wasInProgress && wasStarted && isReload)) return;  // nothing to do
+  
+    // restore state
+    try{
+      lockedDifficulty = sessionStorage.getItem("pvr_test_lockedDifficulty") || "BASIC";
+      selected = JSON.parse(sessionStorage.getItem("pvr_test_selected") || "[]");
+      chosen = JSON.parse(sessionStorage.getItem("pvr_test_chosen") || "{}");
+      idx = Number(sessionStorage.getItem("pvr_test_idx") || "0");
+      started = true;
+    }catch(e){
+      // if restore fails just go login
+      sessionStorage.clear();
+      window.location.href = "login.html";
+      return;
+    }
+  
+    // lock dropdown
+    elDiff.value = lockedDifficulty;
+    elDiff.disabled = true;
+  
+    // show message & submit automatically
+    showToast("Refreshing detected. Auto-submitting your answers...");
+    isAutoSubmitting = true;
+  
+    try{
+      await finalizeSubmit(); // this already submits + redirects to results.html (in your current code)
+    }catch(e){
+      // if submit fails, force login
+      sessionStorage.clear();
+      window.location.href = "login.html";
+    }
+  }
+
     // Run guard immediately
-    hardGuard();
+    hardGuard().then(() => {
+      restoreOrAutosubmitOnRefresh();
+    });
 
   const PASS_PERCENT = 80;
   const FINAL_SAVE_MESSAGE = "Answers saved. If needed please contact to PVRCLOUDTECH.";
@@ -562,6 +597,7 @@ body::before{
   let lockedDifficulty = null;   // difficulty fixed once test starts
   let timerId = null;
   let timeLeft = 0;  
+  let isAutoSubmitting = false;
   function timePerQuestion(){
     return 30;
   }
@@ -610,6 +646,7 @@ body::before{
     // do NOT force selection, just move
     if (idx < selected.length - 1) {
       idx += 1;
+      saveProgress();
       render();
       startTimer();
     } else {
@@ -633,6 +670,17 @@ body::before{
     }
     return a;
   }
+
+  function saveProgress(){
+  try{
+    sessionStorage.setItem("pvr_test_inprogress", "1");
+    sessionStorage.setItem("pvr_test_lockedDifficulty", lockedDifficulty || "");
+    sessionStorage.setItem("pvr_test_selected", JSON.stringify(selected || []));
+    sessionStorage.setItem("pvr_test_chosen", JSON.stringify(chosen || {}));
+    sessionStorage.setItem("pvr_test_idx", String(idx));
+    sessionStorage.setItem("pvr_test_started", started ? "1" : "0");
+  }catch(e){}
+}
 
   function setButtons(){
     btnComplete.disabled = !started || selected.length === 0;
@@ -705,6 +753,7 @@ body::before{
     elOpts.querySelectorAll('input[name="opt"]').forEach(r => {
       r.addEventListener('change', (e) => {
         chosen[idx] = Number(e.target.value);
+        saveProgress();
         setPill();
         setTimeout(() => {
         stopTimer();
@@ -815,6 +864,14 @@ body::before{
     if (data && data.ok) {
       showToast("Submitted successfully");
 
+      sessionStorage.removeItem("pvr_test_inprogress");
+      sessionStorage.removeItem("pvr_test_lockedDifficulty");
+      sessionStorage.removeItem("pvr_test_selected");
+      sessionStorage.removeItem("pvr_test_chosen");
+      sessionStorage.removeItem("pvr_test_idx");
+      sessionStorage.removeItem("pvr_test_started");
+
+
       // Save result for results.html
       sessionStorage.setItem("pvr_lastResult", JSON.stringify({
         name: elName.value,
@@ -873,7 +930,7 @@ body::before{
         chosen = {};
         idx = 0;
         started = true;
-        
+        saveProgress();
         elResult.style.display = "none";
         elResult.innerHTML = "";
         
