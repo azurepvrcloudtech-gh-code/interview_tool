@@ -559,10 +559,10 @@ body::before{
   let idx = -1;
   let started = false;
   let chosen = {}; // idx -> selectedOptionIndex
-
+  let lockedDifficulty = null;   // difficulty fixed once test starts
   let timerId = null;
   let timeLeft = 0;  
-  function timePerQuestion(diff){
+  function timePerQuestion(){
     return 30;
   }
 
@@ -583,8 +583,7 @@ body::before{
   
   function startTimer(){
     stopTimer();
-    const diff = (elDiff.value || "BASIC").toUpperCase();
-    timeLeft = timePerQuestion(diff);
+    timeLeft = timePerQuestion();
   
     // show timer in meta
     updateMetaWithTimer();
@@ -649,7 +648,7 @@ body::before{
     elPill.textContent = `In progress: ${answered}/${selected.length} answered`;
   }
 
-  function createAttemptQuestions(diff){
+  function createAttemptQuestions(lockedDifficulty){
     // shuffle questions every Start
     const qs = shuffle(BANK[diff]).slice(0, 25);
 
@@ -729,7 +728,7 @@ body::before{
 
   function passFailMessage(percent, difficulty){
     if (percent >= PASS_PERCENT) {
-      return `Congratulations! You passed the ADF ${difficulty.toLowerCase()} test. Keep up the great work and continue strengthening your ADF fundamentals.`;
+      return `Congratulations! You passed the ADF ${lockedDifficulty.toLowerCase()} test. Keep up the great work and continue strengthening your ADF fundamentals.`;
     }
     // Suggested best message for below 80%
     return `Thanks for taking the test. Your score is ${percent}%. Don’t worry—review the topics you missed, practice a bit more, and try again. Consistency will get you there.`;
@@ -737,7 +736,7 @@ body::before{
 
   async function submitToGoogle(){
 
-    const difficulty = (elDiff.value || "BASIC").toUpperCase();
+    const difficulty = lockedDifficulty;
     const { correct, total, percent } = computeScore();
 
     const questionsPayload = selected.map((q, i) => {
@@ -795,7 +794,7 @@ body::before{
 
   async function finalizeSubmit(){
   stopTimer();
-  const difficulty = (elDiff.value || "BASIC").toUpperCase();
+  const difficulty = lockedDifficulty;
   const { correct, total, percent } = computeScore();
 
   // Show result box instantly
@@ -856,14 +855,18 @@ body::before{
         return;
       }
     
-      const diff = (elDiff.value || "BASIC").toUpperCase();
+      lockedDifficulty = (elDiff.value || "BASIC").toUpperCase();
+      elDiff.disabled = true;
+      elDiff.style.opacity = "0.7";
+      elDiff.style.cursor = "not-allowed";
+
       const bank = BANK[diff];
       if (!bank || bank.length < 25) {
         showToast("Question bank is incomplete for this difficulty.");
         return;
       }
     
-      selected = createAttemptQuestions(diff);
+      selected = createAttemptQuestions(lockedDifficulty);
       chosen = {};
       idx = 0;
       started = true;
@@ -878,6 +881,14 @@ body::before{
       // once started, disable Start to prevent restart
       btnStart.disabled = true;
     });
+
+  // Prevent difficulty change after test starts (extra safety)
+  elDiff.addEventListener("change", () => {
+    if (started && lockedDifficulty) {
+      elDiff.value = lockedDifficulty;
+      showToast("Difficulty cannot be changed once the test starts.");
+    }
+  });
 
   btnComplete.addEventListener('click', () => {
     if (!started || selected.length === 0) return;
@@ -894,7 +905,6 @@ body::before{
     // If all answered, submit directly (or you can still confirm if you want)
     finalizeSubmit();
   });
-
 
   btnGoBack.addEventListener('click', () => {
     closeConfirmModal();
