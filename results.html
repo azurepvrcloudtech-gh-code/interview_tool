@@ -74,10 +74,17 @@
   </div>
 
 <script>
+  /* =========================
+     RESULT TIMER (NO RESET)
+     ========================= */
+  const RESULT_TIMER_SECONDS = 60;
+  const RESULT_TIMER_KEY = "pvr_result_expiry";
+
   const box = document.getElementById("resultBox");
   const wa = document.getElementById("waLink");
   const closeTimer = document.getElementById("closeTimer");
 
+  /* ---------- Load result ---------- */
   const raw = sessionStorage.getItem("pvr_lastResult");
   if (!raw) {
     box.innerHTML = "No result found. Please login again.";
@@ -94,7 +101,6 @@
       <b>Message:</b> Thanks for taking the test. If you need help, please reach out to <b>PVR Cloud Tech</b>.
     `;
 
-    // WhatsApp prefilled message (opens WhatsApp, user clicks send)
     const msg = encodeURIComponent(
       `Hi PVR Cloud Tech, I completed the ${r.difficulty} ADF test.\n` +
       `Score: ${r.correct}/${r.total} (${r.percent}%).\n` +
@@ -102,29 +108,42 @@
       `Please share the result document to me. Thank You.`
     );
 
-    // NOTE: This sends message to YOUR number (replace with your WhatsApp number)
-    const YOUR_WHATSAPP_NUMBER = "917569326969"; // <-- replace with your number (91 + 10 digits)
+    const YOUR_WHATSAPP_NUMBER = "917569326969";
     wa.href = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${msg}`;
   }
 
-  // clear result after loading (optional)
-  // sessionStorage.removeItem("pvr_lastResult");
+  /* ---------- Timer helpers ---------- */
+  function getTimeLeft(){
+    const expiry = Number(sessionStorage.getItem(RESULT_TIMER_KEY) || 0);
+    if (!expiry) return RESULT_TIMER_SECONDS;
 
-  // auto close in 60 seconds
-  let t = 60;
-  closeTimer.textContent = `This page will close in ${t}s...`;
+    const diff = Math.ceil((expiry - Date.now()) / 1000);
+    return diff > 0 ? diff : 0;
+  }
 
-  const iv = setInterval(() => {
-    t--;
-    closeTimer.textContent = `This page will close in ${t}s...`;
-    if (t <= 0) {
+  function updateTimerUI(sec){
+    closeTimer.textContent = `This page will close in ${sec}s...`;
+  }
+
+  /* ---------- Init expiry ONCE ---------- */
+  if (!sessionStorage.getItem(RESULT_TIMER_KEY)) {
+    const expiry = Date.now() + RESULT_TIMER_SECONDS * 1000;
+    sessionStorage.setItem(RESULT_TIMER_KEY, String(expiry));
+  }
+
+  /* ---------- Start timer ---------- */
+  let iv = setInterval(() => {
+    const left = getTimeLeft();
+    updateTimerUI(left);
+
+    if (left <= 0) {
       clearInterval(iv);
-      window.close(); // works if opened by script; otherwise browser may block
-      // fallback:
+      sessionStorage.removeItem(RESULT_TIMER_KEY);
       window.location.href = "login.html";
     }
   }, 1000);
+
+  updateTimerUI(getTimeLeft());
 </script>
 </body>
 </html>
-
