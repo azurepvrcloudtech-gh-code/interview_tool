@@ -5,6 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ADF MCQ Test</title>
   <style>
+
+    /* ===== Better dropdown styling (difficulty) ===== */
+#difficulty{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background: rgba(18,26,51,.88);               /* glass card bg */
+  border: 1px solid rgba(255,255,255,.18);
+  color: var(--text);
+
+  padding-right: 42px;                          /* space for arrow */
+  box-shadow: 0 10px 22px rgba(0,0,0,.25);
+}
+
+/* custom arrow */
+#difficulty{
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(232,236,255,.85) 50%),
+    linear-gradient(135deg, rgba(232,236,255,.85) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 55%,
+    calc(100% - 12px) 55%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+#difficulty:hover{
+  border-color: rgba(122,162,255,.55);
+}
+
+#difficulty:focus{
+  border-color: rgba(122,162,255,.70);
+  box-shadow: 0 0 0 3px rgba(122,162,255,.18), 0 12px 26px rgba(0,0,0,.35);
+}
+
+/* options list (best effort; OS may still control some parts) */
+#difficulty option{
+  background: #121a33;        /* solid so text is readable */
+  color: #e8ecff;
+  padding: 10px;
+}
+
+/* better highlight (some browsers ignore) */
+#difficulty option:checked,
+#difficulty option:hover{
+  background: #1b2a55;
+  color: #ffffff;
+}
+    
     /* Watermark background */
 body::before{
   content:"";
@@ -513,9 +563,7 @@ body::before{
   let timerId = null;
   let timeLeft = 0;  
   function timePerQuestion(diff){
-    if (diff === "BASIC") return 20;
-    if (diff === "INTERMEDIATE") return 25;
-    return 30; // ADVANCED
+    return 30;
   }
 
     // Auto-fill from verified login
