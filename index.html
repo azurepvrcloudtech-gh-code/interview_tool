@@ -880,8 +880,21 @@ body::before{
     });
 
   btnComplete.addEventListener('click', () => {
+    if (!started || selected.length === 0) return;
+  
+    const answered = countAnswered();
+    const notAnswered = selected.length - answered;
+  
+    // If not all answered, show confirm popup
+    if (notAnswered > 0) {
+      openConfirmModal(answered, notAnswered);
+      return;
+    }
+  
+    // If all answered, submit directly (or you can still confirm if you want)
     finalizeSubmit();
   });
+
 
   btnGoBack.addEventListener('click', () => {
     closeConfirmModal();
