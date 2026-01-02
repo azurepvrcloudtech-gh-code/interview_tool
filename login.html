@@ -166,10 +166,12 @@
       showToast("Verifying...");
       const data = await post("verifyOtp", { name, email, phone, otp });
       if (data && data.ok && data.sessionToken) {
-        localStorage.setItem("pvr_sessionToken", data.sessionToken);
-        localStorage.setItem("pvr_candidateName", data.name || name);
-        localStorage.setItem("pvr_candidateEmail", data.email || email);
-        localStorage.setItem("pvr_candidatePhone", data.phone || phone);
+        sessionStorage.setItem("pvr_sessionToken", data.sessionToken);
+        sessionStorage.setItem("pvr_candidateName", data.name || name);
+        sessionStorage.setItem("pvr_candidateEmail", data.email || email);
+        sessionStorage.setItem("pvr_candidatePhone", data.phone || phone);        
+        // mark login time (used to force relogin on refresh)
+        sessionStorage.setItem("pvr_loginAt", String(Date.now()));
         showToast("Verified. Redirecting...");
         setTimeout(()=> window.location.href = "index.html", 500);
       } else {
@@ -182,6 +184,7 @@
 </script>
 </body>
 </html>
+
 
 
 
