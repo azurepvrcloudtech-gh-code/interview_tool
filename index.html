@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ADF MCQ Test</title>
   <style>
-    select, option{
-    background: #000 !important;
-    color: #fff !important;
-  }
     /* Watermark background */
 body::before{
   content:"";
@@ -169,11 +165,6 @@ body::before{
     <input id="candidatePhone" type="tel" placeholder="e.g., 9876543210" />
   </div>
 
-    <div class="toolbar">
-      <button class="btn" id="btnStart" disabled>Start</button>
-      <button class="btn primary" id="btnComplete" disabled>Complete</button>
-    </div>
-
   <div>
     <label for="difficulty">Select Level</label>
     <select id="difficulty">
@@ -196,7 +187,6 @@ body::before{
 
         <div class="toolbar">
           <button class="btn" id="btnStart">Start</button>
-          <button class="btn primary" id="btnNext" disabled>Save & Next</button>
           <button class="btn primary" id="btnComplete" disabled>Complete</button>
         </div>
 
@@ -252,6 +242,26 @@ body::before{
 
   const SESSION_TOKEN = sessionStorage.getItem("pvr_sessionToken");
 
+  // ====== DOM ======
+  const elName = document.getElementById('candidateName');
+  const elEmail = document.getElementById('candidateEmail');
+  const elPhone = document.getElementById('candidatePhone');
+  const elDiff = document.getElementById('difficulty');
+  const elQText = document.getElementById('qText');
+  const elQMeta = document.getElementById('qMeta');
+  const elOpts = document.getElementById('options');
+  const elPill = document.getElementById('statusPill');
+  const elResult = document.getElementById('resultBox');
+  const toast = document.getElementById('toast');
+
+  const btnStart = document.getElementById('btnStart');
+  const btnComplete = document.getElementById('btnComplete');
+
+  const confirmBackdrop = document.getElementById('confirmBackdrop');
+  const confirmText = document.getElementById('confirmText');
+  const btnGoBack = document.getElementById('btnGoBack');
+  const btnSubmitAnyway = document.getElementById('btnSubmitAnyway');
+  
   // Start disabled until server validates
     btnStart.disabled = true;
     
@@ -508,27 +518,6 @@ body::before{
     return 30; // ADVANCED
   }
 
-  // ====== DOM ======
-  const elName = document.getElementById('candidateName');
-  const elEmail = document.getElementById('candidateEmail');
-  const elPhone = document.getElementById('candidatePhone');
-  const elDiff = document.getElementById('difficulty');
-  const elQText = document.getElementById('qText');
-  const elQMeta = document.getElementById('qMeta');
-  const elOpts = document.getElementById('options');
-  const elPill = document.getElementById('statusPill');
-  const elResult = document.getElementById('resultBox');
-  const toast = document.getElementById('toast');
-
-  const btnStart = document.getElementById('btnStart');
-  const btnNext = document.getElementById('btnNext');
-  const btnComplete = document.getElementById('btnComplete');
-
-  const confirmBackdrop = document.getElementById('confirmBackdrop');
-  const confirmText = document.getElementById('confirmText');
-  const btnGoBack = document.getElementById('btnGoBack');
-  const btnSubmitAnyway = document.getElementById('btnSubmitAnyway');
-
     // Auto-fill from verified login
   elName.value = sessionStorage.getItem("pvr_candidateName") || "";
   elEmail.value = sessionStorage.getItem("pvr_candidateEmail") || "";
@@ -599,7 +588,6 @@ body::before{
   }
 
   function setButtons(){
-    btnNext.disabled = !started || idx < 0;
     btnComplete.disabled = !started || selected.length === 0;
   }
 
@@ -734,7 +722,10 @@ body::before{
       body: JSON.stringify(payload)
     });
 
-    return await res.json();
+    const txt = await res.text();
+    try { return JSON.parse(txt); }
+    catch { return { ok:false, error:"Non-JSON response: " + txt.slice(0,160) }; }
+
   }
 
   function openConfirmModal(answered, notAnswered){
@@ -839,17 +830,6 @@ body::before{
       // once started, disable Start to prevent restart
       btnStart.disabled = true;
     });
-
-  btnNext.addEventListener('click', () => {
-    // Save&Next requires selection
-    if (!Number.isInteger(chosen[idx])) {
-      showToast("Please select an option before moving next.");
-      return;
-    }
-    if (idx < selected.length - 1) idx += 1;
-    render();
-    startTimer();
-  });
 
   btnComplete.addEventListener('click', () => {
     finalizeSubmit();
