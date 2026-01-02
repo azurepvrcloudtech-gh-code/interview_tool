@@ -641,37 +641,56 @@ body::before{
   }
 
   async function finalizeSubmit(){
-    const difficulty = (elDiff.value || "BASIC").toUpperCase();
-    const { correct, total, percent } = computeScore();
+  const difficulty = (elDiff.value || "BASIC").toUpperCase();
+  const { correct, total, percent } = computeScore();
 
-    elResult.style.display = "block";
-    elResult.innerHTML = `
-      <b>Result</b><br/>
-      Score: <b>${correct}/${total}</b><br/>
-      Percentage: <b>${percent}%</b><br/><br/>
-      <span>${passFailMessage(percent, difficulty)}</span><br/><br/>
-      <span>${FINAL_SAVE_MESSAGE}</span>
-    `;
+  // Show result box instantly
+  elResult.style.display = "block";
+  elResult.innerHTML = `
+    <b>Result</b><br/>
+    Score: <b>${correct}/${total}</b><br/>
+    Percentage: <b>${percent}%</b><br/><br/>
+    <span>${passFailMessage(percent, difficulty)}</span><br/><br/>
+    <span>${FINAL_SAVE_MESSAGE}</span>
+  `;
 
-    try {
-      showToast("Submitting...");
-      const data = await submitToGoogle();
-      if (data && data.ok) {
-        showToast("Submitted successfully");
-        // force re-login on refresh or revisit
-        sessionStorage.clear();
-      }
-        // Requirement: do NOT show file name/url on the page.
-      } else {
-        showToast("Submit failed");
-        // Optional: show minimal error without exposing file info
-        elResult.innerHTML += `<br/><br/> Submit failed. Please try again.`;
-      }
-    } catch (e) {
-      showToast("Network error");
-      elResult.innerHTML += `<br/><br/> Network error. Please try again.`;
+  try {
+    showToast("Submitting...");
+    const data = await submitToGoogle();
+
+    if (data && data.ok) {
+      showToast("Submitted successfully");
+
+      // Save result for results.html
+      sessionStorage.setItem("pvr_lastResult", JSON.stringify({
+        name: elName.value,
+        email: elEmail.value,
+        phone: elPhone.value,
+        difficulty,
+        correct,
+        total,
+        percent
+      }));
+
+      // LOGOUT (remove login session)
+      sessionStorage.removeItem("pvr_sessionToken");
+      sessionStorage.removeItem("pvr_candidateName");
+      sessionStorage.removeItem("pvr_candidateEmail");
+      sessionStorage.removeItem("pvr_candidatePhone");
+      sessionStorage.removeItem("pvr_loginAt");
+
+      // Go to results page
+      window.location.href = "results.html";
+      return;
+    } else {
+      showToast(data.error || "Submit failed");
+      elResult.innerHTML += `<br/><br/> Submit failed. Please try again.`;
     }
+  } catch (e) {
+    showToast("Network error");
+    elResult.innerHTML += `<br/><br/> Network error. Please try again.`;
   }
+}
 
   // ====== Events ======
   btnStart.addEventListener('click', () => {
