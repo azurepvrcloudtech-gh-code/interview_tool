@@ -217,12 +217,21 @@ body::before{
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiMPJzS6aT0fkx5P6qojAf9mF9YlRpaQEQsJz2w3z489RgQVHPxtbGAkCSA7J_ADoY/exec";
   const SECRET_KEY = "PVR_MCQ_interview_2026"; // must match Apps Script
 
-  const SESSION_TOKEN = localStorage.getItem("pvr_sessionToken");
-if (!SESSION_TOKEN) {
-  window.location.href = "login.html";
-}
-
-
+  function isRefreshNavigation(){
+  const nav = performance.getEntriesByType("navigation")[0];
+  if (nav && nav.type) return nav.type === "reload";
+  return performance.navigation && performance.navigation.type === 1;
+  }
+  
+  // Force re-login if page is refreshed
+  if (isRefreshNavigation()) {
+    sessionStorage.clear();
+    window.location.href = "login.html";
+  }
+  const SESSION_TOKEN = sessionStorage.getItem("pvr_sessionToken");
+  if (!SESSION_TOKEN) {
+    window.location.href = "login.html";
+  }
   const PASS_PERCENT = 80;
   const FINAL_SAVE_MESSAGE = "Answers saved. If needed please contact to PVRCLOUDTECH.";
 
@@ -459,9 +468,9 @@ if (!SESSION_TOKEN) {
   const btnSubmitAnyway = document.getElementById('btnSubmitAnyway');
 
     // Auto-fill from verified login
-  elName.value = localStorage.getItem("pvr_candidateName") || "";
-  elEmail.value = localStorage.getItem("pvr_candidateEmail") || "";
-  elPhone.value = localStorage.getItem("pvr_candidatePhone") || "";
+  elName.value = sessionStorage.getItem("pvr_candidateName") || "";
+  elEmail.value = sessionStorage.getItem("pvr_candidateEmail") || "";
+  elPhone.value = sessionStorage.getItem("pvr_candidatePhone") || "";
   
   // Make them read-only after verification
   elName.readOnly = true;
@@ -601,15 +610,15 @@ if (!SESSION_TOKEN) {
     });
 
     const payload = {
-  secret: SECRET_KEY,
-  action: "submitTest",
-  sessionToken: SESSION_TOKEN,
-  difficulty,
-  total,
-  correct,
-  percent,
-  questions: questionsPayload
-};
+      secret: SECRET_KEY,
+      action: "submitTest",
+      sessionToken: SESSION_TOKEN,
+      difficulty,
+      total,
+      correct,
+      percent,
+      questions: questionsPayload
+    };
 
     const res = await fetch(APPS_SCRIPT_URL, {
       method: "POST",
@@ -649,6 +658,9 @@ if (!SESSION_TOKEN) {
       const data = await submitToGoogle();
       if (data && data.ok) {
         showToast("Submitted successfully");
+        // force re-login on refresh or revisit
+        sessionStorage.clear();
+      }
         // Requirement: do NOT show file name/url on the page.
       } else {
         showToast("Submit failed");
