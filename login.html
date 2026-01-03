@@ -14,54 +14,189 @@
       pointer-events: none;
       z-index: 0;
     }
-    .wrap{ position: relative; z-index: 1; }
-
     :root { --bg:#0b1020; --card:#121a33; --text:#e8ecff; --muted:#aab3d6; --accent:#7aa2ff; --danger:#ff6b6b; }
     * { box-sizing:border-box; }
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, #18214a 0%, var(--bg) 55%), var(--bg); color: var(--text); }
-    .wrap { max-width: 560px; margin: 70px auto; padding: 0 18px; }
-    .card { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.10); border-radius: 18px; padding: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.35); }
-    h1 { margin:0; font-size: 20px; }
-    .sub { margin:8px 0 0; color: var(--muted); font-size: 13px; line-height:1.4; }
+    body {
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, #18214a 0%, var(--bg) 55%), var(--bg);
+      color: var(--text);
+    }
+
+    .wrap{ position: relative; z-index: 1; max-width: 560px; margin: 70px auto 90px auto; padding: 0 18px; }
+
+    /* Top header (Login + logo on left) */
+    .pageHeader{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:14px;
+    }
+    .brandTop{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .topLogo{
+      height:46px;
+      width:auto;
+      padding:6px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.08);
+      box-shadow:0 0 0 1px rgba(255,255,255,0.12), 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .pageTitle{ margin:0; font-size:20px; }
+    .pageSub{ margin:6px 0 0; color: var(--muted); font-size:13px; line-height:1.4; }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+
+    /* Candidate Verification header with right-side badge (like your screenshot) */
+    .loginCardHeader{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:10px;
+    }
+    .cardTitle{
+      margin:0;
+      font-size:18px;
+      font-weight:700;
+    }
+    .cardSub{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.4;
+      max-width: 520px;
+    }
+    .brandBadge{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border-radius:12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
+      white-space: nowrap;
+    }
+    .brandBadgeLogo{
+      height:26px;
+      width:auto;
+      display:block;
+      border-radius:6px;
+      background: rgba(255,255,255,0.06);
+    }
+
     label { display:block; font-size: 12px; color: var(--muted); margin: 14px 0 6px; }
     input {
-      width:100%; border-radius: 12px; border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.20); color: var(--text); padding: 10px 12px; outline:none;
+      width:100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      color: var(--text);
+      padding: 10px 12px;
+      outline:none;
     }
     input:focus { border-color: rgba(122,162,255,.65); box-shadow: 0 0 0 3px rgba(122,162,255,.15); }
     .row { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .btnRow { display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px; }
-    .btn { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.07); color: var(--text);
-      padding: 10px 12px; border-radius: 12px; cursor:pointer; font-weight:600; }
+    .btn {
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:600;
+    }
     .btn:hover { background: rgba(255,255,255,.12); }
     .btn.primary { background: rgba(122,162,255,.22); border-color: rgba(122,162,255,.5); }
     .btn.primary:hover { background: rgba(122,162,255,.30); }
+
     .hint { color: var(--muted); font-size: 12px; margin-top: 10px; line-height:1.4; }
-    .toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
-      background: rgba(18,26,51,.95); border: 1px solid rgba(255,255,255,.14);
-      padding: 10px 12px; border-radius: 12px; box-shadow: 0 10px 22px rgba(0,0,0,.35);
-      font-size: 13px; opacity: 0; pointer-events:none; transition: opacity .18s ease; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(18,26,51,.95);
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 10px 12px;
+      border-radius: 12px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .18s ease;
+      z-index: 5;
+    }
     .toast.show { opacity: 1; }
+
+    /* Footer bar (like index page) */
+    .footerBar{
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 8px;
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 0 18px;
+      color: rgba(232,236,255,.85);
+      font-size: 12px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .footerStrong{ color: #e8ecff; font-weight: 600; }
+
+    @media (max-width:520px){
+      .loginCardHeader{ flex-direction: column; }
+      .brandBadge{ width: fit-content; }
+      .row{ grid-template-columns: 1fr; }
+    }
   </style>
 </head>
+
 <body>
-  <div class="header" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;">
-  <div class="brand" style="display:flex;align-items:center;gap:14px;">
-    <img src="./assets/logo.png" alt="PVR Cloud Tech" style="height:46px;width:auto;padding:6px;border-radius:10px;background:rgba(255,255,255,0.08);box-shadow:0 0 0 1px rgba(255,255,255,0.12), 0 8px 20px rgba(0,0,0,0.4);">
-    <div>
-      <h1 style="margin:0;font-size:20px;">Login</h1>
-      <p style="margin:6px 0 0;color:rgba(170,179,214,1);font-size:13px;line-height:1.4;">
-        Please enter your details to begin the assessment.
-      </p>
-    </div>
-  </div>
-</div>
   <div class="wrap">
+
+    <!-- TOP HEADER -->
+    <div class="pageHeader">
+      <div class="brandTop">
+        <img src="./assets/logo.png" alt="PVR Cloud Tech" class="topLogo">
+        <div>
+          <h1 class="pageTitle">Login</h1>
+          <p class="pageSub">Please enter your details to begin the assessment.</p>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
-      <h1>Candidate Verification</h1>
-      <p class="sub">Enter your details, verify your email via OTP (valid for 5 minutes), and then start the test.</p>
+
+      <!-- CARD HEADER (Candidate Verification + badge on right) -->
+      <div class="loginCardHeader">
+        <div>
+          <h2 class="cardTitle">Candidate Verification</h2>
+          <p class="cardSub">
+            Enter your details, verify your email via OTP (valid for 5 minutes), and then start the test.
+          </p>
+        </div>
+
+        <div class="brandBadge">
+          <img src="./assets/logo.png" class="brandBadgeLogo" alt="PVR Cloud Tech">
+          <span>PVR Cloud Tech</span>
+        </div>
+      </div>
 
       <label for="name">Full Name</label>
       <input id="name" type="text" placeholder="e.g., Srinivas" />
@@ -93,6 +228,12 @@
     </div>
   </div>
 
+  <!-- Footer -->
+  <div class="footerBar">
+    <div>Website: <span class="footerStrong">www.pvrcloudtech.com</span></div>
+    <div>Phone: <span class="footerStrong">+91 9346060794</span></div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
 <script>
@@ -118,33 +259,31 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
   function isIndiaPhone10(phone){
-    return /^[6-9]\d{9}$/.test(phone); // common India mobile range; change to /^\d{10}$/ if you want any 10 digits
+    return /^[6-9]\d{9}$/.test(phone);
   }
 
   async function post(action, extra){
-  const payload = Object.assign({ secret: SECRET_KEY, action }, extra || {});
-  let res;
-  try {
-    res = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload),
-      redirect: "follow"
-    });
-  } catch (err) {
-    showToast("Fetch failed: " + err.message);
-    throw err;
-  }
+    const payload = Object.assign({ secret: SECRET_KEY, action }, extra || {});
+    let res;
+    try {
+      res = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload),
+        redirect: "follow"
+      });
+    } catch (err) {
+      showToast("Fetch failed: " + err.message);
+      throw err;
+    }
 
-  const text = await res.text(); // read raw
-  try {
-    return JSON.parse(text);
-  } catch {
-    // shows you if Apps Script returned HTML/login page/etc.
-    return { ok:false, error: "Non-JSON response: " + text.slice(0, 160) };
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch {
+      return { ok:false, error: "Non-JSON response: " + text.slice(0, 160) };
+    }
   }
-}
-
 
   btnSendOtp.addEventListener('click', async () => {
     const name = (elName.value || '').trim();
@@ -160,11 +299,8 @@
     try{
       showToast("Sending OTP...");
       const data = await post("sendOtp", { name, email, phone });
-      if (data && data.ok) {
-        showToast("OTP sent to email");
-      } else {
-        showToast(data.error || "OTP send failed");
-      }
+      if (data && data.ok) showToast("OTP sent to email");
+      else showToast(data.error || "OTP send failed");
     } catch(e){
       showToast("Network error");
     }
@@ -191,8 +327,7 @@
         sessionStorage.setItem("pvr_sessionToken", data.sessionToken);
         sessionStorage.setItem("pvr_candidateName", data.name || name);
         sessionStorage.setItem("pvr_candidateEmail", data.email || email);
-        sessionStorage.setItem("pvr_candidatePhone", data.phone || phone);        
-        // mark login time (used to force relogin on refresh)
+        sessionStorage.setItem("pvr_candidatePhone", data.phone || phone);
         sessionStorage.setItem("pvr_loginAt", String(Date.now()));
         showToast("Verified. Redirecting...");
         setTimeout(()=> window.location.href = "index.html", 500);
@@ -206,11 +341,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
