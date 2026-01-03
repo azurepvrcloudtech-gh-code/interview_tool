@@ -22,7 +22,32 @@
       pointer-events: none;
       z-index: 0;
     }
-    .wrap{ position: relative; z-index: 1; max-width: 680px; margin: 70px auto; padding: 0 18px; }
+
+    .wrap{ position: relative; z-index: 1; max-width: 720px; margin: 64px auto 80px auto; padding: 0 18px; }
+
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:16px;
+      margin-bottom: 14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .logo{
+      height: 46px;
+      width: auto;
+      padding: 6px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .brandText h1{ margin:0; font-size: 20px; }
+    .sub{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height:1.4; }
+
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border: 1px solid rgba(255,255,255,.10);
@@ -30,8 +55,7 @@
       padding: 18px;
       box-shadow: 0 12px 30px rgba(0,0,0,.35);
     }
-    h1{ margin:0; font-size: 20px; }
-    .sub{ margin:8px 0 0; color: var(--muted); font-size: 13px; line-height:1.4; }
+
     .box{
       margin-top: 14px;
       padding: 12px;
@@ -39,7 +63,9 @@
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.18);
       line-height: 1.6;
+      white-space: pre-wrap;
     }
+
     .btnRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px; }
     .btn{
       border: 1px solid rgba(255,255,255,.14);
@@ -52,16 +78,49 @@
       text-decoration: none;
       display:inline-block;
     }
+    .btn:hover{ background: rgba(255,255,255,.12); }
     .btn.primary{ background: rgba(122,162,255,.22); border-color: rgba(122,162,255,.5); }
+    .btn.primary:hover{ background: rgba(122,162,255,.30); }
+
     .muted{ color: var(--muted); font-size: 12px; margin-top: 10px; }
+
+    .footer{
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      justify-content: space-between;
+      gap:10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .footer a{
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(255,255,255,.20);
+    }
+    .footer a:hover{
+      color: var(--text);
+      border-bottom-color: rgba(255,255,255,.45);
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>Test Completed</h1>
-      <p class="sub">Your result is shown below. This page will auto close in 1 minute.</p>
 
+    <!-- Logo/Header -->
+    <div class="header">
+      <div class="brand">
+        <img src="./assets/logo.png" class="logo" alt="PVR Cloud Tech">
+        <div class="brandText">
+          <h1>Assessment Result</h1>
+          <p class="sub">Your result is shown below. This page will auto close in 1 minute.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
       <div class="box" id="resultBox">Loading...</div>
 
       <div class="btnRow">
@@ -70,6 +129,12 @@
       </div>
 
       <div class="muted" id="closeTimer"></div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div>Website: <a href="https://www.pvrcloudtech.com" target="_blank">www.pvrcloudtech.com</a></div>
+        <div>Phone: <a href="tel:+919346060794">+91 9346060794</a></div>
+      </div>
     </div>
   </div>
 
@@ -84,39 +149,68 @@
   const wa = document.getElementById("waLink");
   const closeTimer = document.getElementById("closeTimer");
 
-  /* ---------- Load result ---------- */
   const raw = sessionStorage.getItem("pvr_lastResult");
   if (!raw) {
     box.innerHTML = "No result found. Please login again.";
   } else {
     const r = JSON.parse(raw);
 
-    box.innerHTML = `
-      <b>Candidate:</b> ${r.name}<br/>
-      <b>Email:</b> ${r.email}<br/>
-      <b>WhatsApp:</b> ${r.phone}<br/>
-      <b>Level:</b> ${r.difficulty}<br/>
-      <b>Score:</b> ${r.correct}/${r.total}<br/>
-      <b>Percent:</b> ${r.percent}%<br/><br/>
-      <b>Message:</b> Thanks for taking the test. If you need help, please reach out to <b>PVR Cloud Tech</b>.
-    `;
+    // --- NEW message (as requested) ---
+    const longMessage =
+`Thank you for completing the assessment.
 
-    const msg = encodeURIComponent(
-      `Hi PVR Cloud Tech, I completed the ${r.difficulty} ADF test.\n` +
-      `Score: ${r.correct}/${r.total} (${r.percent}%).\n` +
-      `Name: ${r.name}\nEmail: ${r.email}\nWhatsApp: ${r.phone}\n\n` +
-      `Please share the result document to me. Thank You.`
-    );
+For Azure Data Engineering live training sessions, please contact us directly.
+To receive your exam questions and answers result document, kindly message us on WhatsApp.
+
+Thank you,
+Mr. Srinivas
+13+ Years of Industry Experience | Microsoft Certified Trainer
+PVR Cloud Tech`;
+
+    box.textContent =
+      `Candidate: ${r.name}\n` +
+      `Email: ${r.email}\n` +
+      `WhatsApp: ${r.phone}\n` +
+      `Level: ${r.difficulty}\n` +
+      `Score: ${r.correct}/${r.total}\n` +
+      `Percent: ${r.percent}%\n\n` +
+      longMessage;
+
+    // --- Dynamic WhatsApp message (based on actual candidate result) ---
+    const levelTitle = (r.difficulty || "").toUpperCase();
+    const waPhonePretty = String(r.phone || "").startsWith("+") ? r.phone : `+${r.phone}`;
+
+    const msg =
+`Hello PVR Cloud Tech Team,
+
+I have successfully completed the Azure Data Factory – ${levelTitle} Level Assessment.
+Please find my details below and share the exam questions and answers result document with me.
+
+Name: ${r.name}
+
+Test Level: ${levelTitle} – Azure Data Factory
+
+Score: ${r.correct} / ${r.total} (${r.percent}%)
+
+Email: ${r.email}
+
+WhatsApp: ${waPhonePretty}
+
+Additionally, I am interested in Azure Data Engineering live training sessions.
+Kindly let me know the next steps.
+
+Thank you for your support.
+
+Regards,
+${r.name}`;
 
     const YOUR_WHATSAPP_NUMBER = "917569326969";
-    wa.href = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${msg}`;
+    wa.href = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
 
-  /* ---------- Timer helpers ---------- */
   function getTimeLeft(){
     const expiry = Number(sessionStorage.getItem(RESULT_TIMER_KEY) || 0);
     if (!expiry) return RESULT_TIMER_SECONDS;
-
     const diff = Math.ceil((expiry - Date.now()) / 1000);
     return diff > 0 ? diff : 0;
   }
@@ -125,14 +219,15 @@
     closeTimer.textContent = `This page will close in ${sec}s...`;
   }
 
-  /* ---------- Init expiry ONCE ---------- */
+  // Init expiry ONCE (refresh won't reset)
   if (!sessionStorage.getItem(RESULT_TIMER_KEY)) {
     const expiry = Date.now() + RESULT_TIMER_SECONDS * 1000;
     sessionStorage.setItem(RESULT_TIMER_KEY, String(expiry));
   }
 
-  /* ---------- Start timer ---------- */
-  let iv = setInterval(() => {
+  updateTimerUI(getTimeLeft());
+
+  const iv = setInterval(() => {
     const left = getTimeLeft();
     updateTimerUI(left);
 
@@ -142,8 +237,6 @@
       window.location.href = "login.html";
     }
   }, 1000);
-
-  updateTimerUI(getTimeLeft());
 </script>
 </body>
 </html>
